@@ -1,0 +1,93 @@
+[
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "status": "active",
+      "registeredAt": "2022-01-01",
+      "restaurantName": "Sample Restaurant 1"
+    },
+    {
+      "id": 2,
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@example.com",
+      "status": "inactive",
+      "registeredAt": "2022-02-01",
+      "restaurantName": "Sample Restaurant 2"
+    },
+    {
+      "id": 3,
+      "firstName": "Bob",
+      "lastName": "Johnson",
+      "email": "bob.johnson@example.com",
+      "status": "active",
+      "registeredAt": "2022-03-01",
+      "restaurantName": "Sample Restaurant 3"
+    },
+    {
+      "id": 4,
+      "firstName": "Alice",
+      "lastName": "Williams",
+      "email": "alice.williams@example.com",
+      "status": "inactive",
+      "registeredAt": "2022-04-01",
+      "restaurantName": "Sample Restaurant 4"
+    },
+    {
+      "id": 5,
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "email": "charlie.brown@example.com",
+      "status": "active",
+      "registeredAt": "2022-05-01",
+      "restaurantName": "Sample Restaurant 5"
+    },
+    {
+      "id": 6,
+      "firstName": "Eva",
+      "lastName": "Davis",
+      "email": "eva.davis@example.com",
+      "status": "inactive",
+      "registeredAt": "2022-06-01",
+      "restaurantName": "Sample Restaurant 6"
+    },
+    {
+      "id": 7,
+      "firstName": "Frank",
+      "lastName": "White",
+      "email": "frank.white@example.com",
+      "status": "active",
+      "registeredAt": "2022-07-01",
+      "restaurantName": "Sample Restaurant 7"
+    },
+    {
+      "id": 8,
+      "firstName": "Grace",
+      "lastName": "Miller",
+      "email": "grace.miller@example.com",
+      "status": "inactive",
+      "registeredAt": "2022-08-01",
+      "restaurantName": "Sample Restaurant 8"
+    },
+    {
+      "id": 9,
+      "firstName": "Harry",
+      "lastName": "Anderson",
+      "email": "harry.anderson@example.com",
+      "status": "active",
+      "registeredAt": "2022-09-01",
+      "restaurantName": "Sample Restaurant 9"
+    },
+    {
+      "id": 10,
+      "firstName": "Ivy",
+      "lastName": "Moore",
+      "email": "ivy.moore@example.com",
+      "status": "inactive",
+      "registeredAt": "2022-10-01",
+      "restaurantName": "Sample Restaurant 10"
+    }
+  ]
+  

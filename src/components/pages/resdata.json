@@ -1,0 +1,103 @@
+[
+    {
+      "id": 1,
+      "restaurantName": "Delicious Bites",
+      "email": "info@deliciousbites.com",
+      "phone": "+1234567890",
+      "address": "123 Main Street, Cityville",
+      "managedBy": "John Doe",
+      "status": "active",
+      "dateCreated": "2024-01-15"
+    },
+    {
+      "id": 2,
+      "restaurantName": "Tasty Treats",
+      "email": "info@tastytreats.com",
+      "phone": "+9876543210",
+      "address": "456 Oak Avenue, Townsville",
+      "managedBy": "Jane Smith",
+      "status": "inactive",
+      "dateCreated": "2024-02-05"
+    },
+    {
+      "id": 3,
+      "restaurantName": "Flavor Haven",
+      "email": "info@flavorhaven.com",
+      "phone": "+1112233445",
+      "address": "789 Pine Lane, Villageville",
+      "managedBy": "Bob Johnson",
+      "status": "active",
+      "dateCreated": "2024-03-20"
+    },
+    {
+      "id": 4,
+      "restaurantName": "Spice Paradise",
+      "email": "info@spiceparadise.com",
+      "phone": "+5556667777",
+      "address": "321 Spice Street, Season City",
+      "managedBy": "Samantha White",
+      "status": "active",
+      "dateCreated": "2024-04-10"
+    },
+    {
+      "id": 5,
+      "restaurantName": "Gourmet Delights",
+      "email": "info@gourmetdelights.com",
+      "phone": "+9998887777",
+      "address": "876 Gourmet Road, Culinary Town",
+      "managedBy": "Alex Green",
+      "status": "inactive",
+      "dateCreated": "2024-05-15"
+    },
+    {
+      "id": 6,
+      "restaurantName": "Culinary Corner",
+      "email": "info@culinarycorner.com",
+      "phone": "+4443332222",
+      "address": "567 Chef Avenue, Cooksville",
+      "managedBy": "Emily Brown",
+      "status": "active",
+      "dateCreated": "2024-06-25"
+    },
+    {
+      "id": 7,
+      "restaurantName": "Savory Spot",
+      "email": "info@savoryspot.com",
+      "phone": "+7778889999",
+      "address": "987 Flavor Lane, Tastyville",
+      "managedBy": "David Black",
+      "status": "inactive",
+      "dateCreated": "2024-07-03"
+    },
+    {
+      "id": 8,
+      "restaurantName": "Yummy Junction",
+      "email": "info@yummyjunction.com",
+      "phone": "+3332221111",
+      "address": "234 Taste Street, Delicious City",
+      "managedBy": "Sophie Red",
+      "status": "active",
+      "dateCreated": "2024-08-12"
+    },
+    {
+      "id": 9,
+      "restaurantName": "Flavorful Feasts",
+      "email": "info@flavorfulfeasts.com",
+      "phone": "+6665554444",
+      "address": "876 Feast Road, Tasteful Town",
+      "managedBy": "Michael Grey",
+      "status": "inactive",
+      "dateCreated": "2024-09-21"
+    },
+    {
+      "id": 10,
+      "restaurantName": "Epicurean Eats",
+      "email": "info@epicureaneats.com",
+      "phone": "+1239998888",
+      "address": "345 Epicurean Lane, Gourmetville",
+      "managedBy": "Jessica Blue",
+      "status": "active",
+      "dateCreated": "2024-10-05"
+    }
+  ]
+  

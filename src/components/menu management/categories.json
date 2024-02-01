@@ -1,0 +1,13 @@
+[
+    { "categoryId": 1, "categoryName": "Category 1", "dateCreated": "2024-01-27" },
+    { "categoryId": 2, "categoryName": "Category 2", "dateCreated": "2024-01-27" },
+    { "categoryId": 3, "categoryName": "Category 3", "dateCreated": "2024-01-27" },
+    { "categoryId": 4, "categoryName": "Category 4", "dateCreated": "2024-01-27" },
+    { "categoryId": 5, "categoryName": "Category 5", "dateCreated": "2024-01-27" },
+    { "categoryId": 6, "categoryName": "Category 6", "dateCreated": "2024-01-27" },
+    { "categoryId": 7, "categoryName": "Category 7", "dateCreated": "2024-01-27" },
+    { "categoryId": 8, "categoryName": "Category 8", "dateCreated": "2024-01-27" },
+    { "categoryId": 9, "categoryName": "Category 9", "dateCreated": "2024-01-27" },
+    { "categoryId": 10, "categoryName": "Category 10", "dateCreated": "2024-01-27" }
+  ]
+  
