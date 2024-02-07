@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Tag, Input } from 'antd';
-import {
-  SearchOutlined,
-  EditOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-} from '@ant-design/icons';
-import resdata from './resdata.json'
+import { useNavigate } from 'react-router-dom';
+import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import resdata from './resdata.json';
 
 interface Restaurant {
   id: number;
   restaurantName: string;
   email: string;
-  phone: string;
-  address: string;
-  managedBy: string;
   status: string;
   dateCreated: string;
 }
@@ -23,11 +16,10 @@ interface RestaurantsTableProps {
   data: Restaurant[];
 }
 
-const Restaurants: React.FC = () => {
-  // Assuming you have restaurant data or fetch it from an API
-  const data: Restaurant[] = resdata
-
-  const [filteredData, setFilteredData] = useState<Restaurant[]>(data);
+const RestaurantMenuToManage: React.FC = () => {
+  const data: Restaurant[] = resdata;
+  const navigate = useNavigate()
+  const [filteredData, setFilteredData] = useState<Restaurant[]>(data.filter(record => record.status === 'active'));
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<Restaurant | null>(null);
 
@@ -66,24 +58,6 @@ const Restaurants: React.FC = () => {
       ...getColumnSearchProps('email'),
     },
     {
-      title: 'Phone',
-      dataIndex: 'phone',
-      key: 'phone',
-      ...getColumnSearchProps('phone'),
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      ...getColumnSearchProps('address'),
-    },
-    {
-      title: 'Managed By',
-      dataIndex: 'managedBy',
-      key: 'managedBy',
-      ...getColumnSearchProps('managedBy'),
-    },
-    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
@@ -100,20 +74,14 @@ const Restaurants: React.FC = () => {
       sorter: (a: Restaurant, b: Restaurant) => a.status.localeCompare(b.status),
     },
     {
-      title: 'Date Created',
-      dataIndex: 'dateCreated',
-      key: 'dateCreated',
-      sorter: (a: Restaurant, b: Restaurant) => a.dateCreated.localeCompare(b.dateCreated),
-    },
-    {
-      title: 'Edit',
+      title: 'Edit Menu',
       key: 'edit',
       render: (record: Restaurant) => (
         <Button
           type="text"
           style={{ color: 'green' }}
           icon={<EditOutlined />}
-          onClick={() => handleEdit(record)}
+          onClick={() => navigate("/restaurants/4")}
         />
       ),
     },
@@ -161,7 +129,7 @@ const Restaurants: React.FC = () => {
 
   function handleReset(clearFilters: any, dataIndex: string) {
     clearFilters();
-    setFilteredData(data);
+    setFilteredData(data.filter(record => record.status === 'active'));
   }
 
   return (
@@ -184,4 +152,4 @@ const Restaurants: React.FC = () => {
   );
 };
 
-export default Restaurants;
+export default RestaurantMenuToManage;

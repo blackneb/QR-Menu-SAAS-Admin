@@ -19,7 +19,7 @@ const Login: React.FC = () => {
       // Add your authentication logic here, e.g., make an API request
       // Simulate a delay for demonstration purposes (remove in a real application)
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      navigate("/users")
       const json = {
         userLogged: true,
         username: "Jhon Doe",

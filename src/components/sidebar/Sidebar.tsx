@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
+import { Link, useLocation } from 'react-router-dom';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -12,17 +13,23 @@ import {
 } from '@ant-design/icons';
 import Navbar from '../navbar/Navbar';
 import Routing from '../routing/Routing';
-import { useSelector } from 'react-redux';
 import RegistrationTabs from '../pages/RegistrationTabs';
 import RestaurantsTabs from '../pages/RestaurantsTabs';
 import UserTabs from '../pages/UserTabs';
 import ProfileManagementTabs from '../pages/ProfileManagementTabs';
+import { ToolOutlined } from '@ant-design/icons';
+import ManageRestaurantMenuTabs from '../pages/ManageRestaurantMenuTabs';
+
+import { useSelector } from 'react-redux';
+import InnerRouting from '../routing/InnerRouting';
+import Login from '../auth/Login';
 
 const { Header, Sider, Content } = Layout;
 
 const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedMenuItem, setSelectedMenuItem] = useState<string>('1'); // Default selected menu item
+  const location = useLocation();
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string>('users'); // Default selected menu item
   const userLoggedIn = useSelector((state: any) => state.userInformation.userLogged);
 
   const toggleCollapsed = () => {
@@ -35,17 +42,19 @@ const Sidebar: React.FC = () => {
 
   const renderContent = () => {
     switch (selectedMenuItem) {
-      case '1':
-        return <UserTabs/>;
-      case '2':
-        return <RestaurantsTabs/>;
-      case '3':
-        return < RegistrationTabs/>;
-      case '4':
-        return <ProfileManagementTabs/>;
-      case '5':
+      case 'users':
+        return <UserTabs />;
+      case 'restaurants':
+        return <RestaurantsTabs />;
+      case 'manage-restaurants-menu':
+        return <ManageRestaurantMenuTabs />;
+      case 'registration':
+        return <RegistrationTabs />;
+      case 'profile-management':
+        return <ProfileManagementTabs />;
+      case 'analytics':
         return <div>Content for Analytics</div>;
-      case '6':
+      case 'notifications':
         return <div>Content for Notifications</div>;
       default:
         return null;
@@ -59,7 +68,7 @@ const Sidebar: React.FC = () => {
       </Header>
       {userLoggedIn === undefined && (
         <>
-          <Routing />
+          <Login />
         </>
       )}
       {userLoggedIn && (
@@ -80,34 +89,37 @@ const Sidebar: React.FC = () => {
             <Menu
               theme="light"
               mode="inline"
-              defaultSelectedKeys={['1']}
+              defaultSelectedKeys={['users']}
               selectedKeys={[selectedMenuItem]}
               onClick={({ key }) => handleMenuClick(key)}
               style={{ background: 'white' }}
             >
-              <Menu.Item key="1" icon={<UserOutlined />} style={{ color: '#800020' }}>
-                Users
+              <Menu.Item key="users" icon={<UserOutlined />} style={{ color: '#800020' }}>
+                <Link to="/users">Users</Link>
               </Menu.Item>
-              <Menu.Item key="2" icon={<PieChartOutlined />} style={{ color: '#800020' }}>
-                Restaurants
+              <Menu.Item key="restaurants" icon={<PieChartOutlined />} style={{ color: '#800020' }}>
+                <Link to="/restaurants">Restaurants</Link>
               </Menu.Item>
-              <Menu.Item key="3" icon={<FormOutlined />} style={{ color: '#800020' }}>
-                Registration
+              <Menu.Item key="manage-restaurant-menu" icon={<ToolOutlined />} style={{ color: '#800020' }}>
+                <Link to="/manage-restaurant-menu">Manage Restaurant Menu</Link>
               </Menu.Item>
-              <Menu.Item key="4" icon={<ProfileOutlined />} style={{ color: '#800020' }}>
-                Profile Management
+              <Menu.Item key="registration" icon={<FormOutlined />} style={{ color: '#800020' }}>
+                <Link to="/registration">Registration</Link>
               </Menu.Item>
-              <Menu.Item key="5" icon={<LineChartOutlined />} style={{ color: '#800020' }}>
-                Analytics
+              <Menu.Item key="profile-management" icon={<ProfileOutlined />} style={{ color: '#800020' }}>
+                <Link to="/profile-management">Profile Management</Link>
               </Menu.Item>
-              <Menu.Item key="6" icon={<BellOutlined />} style={{ color: '#800020' }}>
-                Notifications
+              <Menu.Item key="analytics" icon={<LineChartOutlined />} style={{ color: '#800020' }}>
+                <Link to="/analytics">Analytics</Link>
+              </Menu.Item>
+              <Menu.Item key="notifications" icon={<BellOutlined />} style={{ color: '#800020' }}>
+                <Link to="/notifications">Notifications</Link>
               </Menu.Item>
             </Menu>
           </Sider>
           <Layout className="site-layout">
             <Content className="p-4 bg-white" style={{ height: 'calc(100vh - 64px)', overflowY: 'auto' }}>
-              {renderContent()}
+              <InnerRouting/>
             </Content>
           </Layout>
         </Layout>

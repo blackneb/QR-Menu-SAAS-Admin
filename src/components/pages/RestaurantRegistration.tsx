@@ -1,13 +1,10 @@
-// Registration.tsx
-
 import React from 'react';
-import { Form, Input, Button, Select, Upload, message } from 'antd';
+import { Form, Input, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
 interface RegistrationProps {}
 
 const RestaurantRegistration: React.FC<RegistrationProps> = () => {
-  const { Option } = Select;
 
   const onFinish = (values: any) => {
     // Handle registration logic here
