@@ -13,12 +13,12 @@ import {
 } from '@ant-design/icons';
 import Navbar from '../navbar/Navbar';
 import Routing from '../routing/Routing';
-import RegistrationTabs from '../pages/RegistrationTabs';
-import RestaurantsTabs from '../pages/RestaurantsTabs';
-import UserTabs from '../pages/UserTabs';
-import ProfileManagementTabs from '../pages/ProfileManagementTabs';
+import RegistrationTabs from '../tabs/RegistrationTabs';
+import RestaurantsTabs from '../tabs/RestaurantsTabs';
+import UserTabs from '../tabs/UserTabs';
+import ProfileManagementTabs from '../tabs/ProfileManagementTabs';
 import { ToolOutlined } from '@ant-design/icons';
-import ManageRestaurantMenuTabs from '../pages/ManageRestaurantMenuTabs';
+import ManageRestaurantMenuTabs from '../tabs/ManageRestaurantMenuTabs';
 
 import { useSelector } from 'react-redux';
 import InnerRouting from '../routing/InnerRouting';

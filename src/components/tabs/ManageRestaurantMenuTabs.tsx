@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs } from 'antd';
-import MenuList from './MenuList';
-import CategoriesList from './CategoriesList';
+import MenuList from '../pages/MenuList';
+import CategoriesList from '../pages/CategoriesList';
 
 const { TabPane } = Tabs;
 

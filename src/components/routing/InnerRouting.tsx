@@ -8,11 +8,11 @@ import {
 } from 'react-router-dom';
 
 import Login from '../auth/Login';
-import UserTabs from '../pages/UserTabs';
-import RestaurantsTabs from '../pages/RestaurantsTabs';
-import ManageRestaurantMenuTabs from '../pages/ManageRestaurantMenuTabs';
-import RegistrationTabs from '../pages/RegistrationTabs';
-import ProfileManagementTabs from '../pages/ProfileManagementTabs';
+import UserTabs from '../tabs/UserTabs';
+import RestaurantsTabs from '../tabs/RestaurantsTabs';
+import ManageRestaurantMenuTabs from '../tabs/ManageRestaurantMenuTabs';
+import RegistrationTabs from '../tabs/RegistrationTabs';
+import ProfileManagementTabs from '../tabs/ProfileManagementTabs';
 import MenuManagement from '../pages/MenuManagement';
 
 

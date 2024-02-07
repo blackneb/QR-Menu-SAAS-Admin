@@ -6,7 +6,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from '@ant-design/icons';
-import resdata from './resdata.json'
+import resdata from '../data/resdata.json'
 
 interface Restaurant {
   id: number;

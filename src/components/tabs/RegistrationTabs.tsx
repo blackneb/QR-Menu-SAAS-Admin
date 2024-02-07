@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs } from 'antd';
-import Registration from './Registration';
-import RestaurantRegistration from './RestaurantRegistration';
+import Registration from '../pages/Registration';
+import RestaurantRegistration from '../pages/RestaurantRegistration';
 
 const { TabPane } = Tabs;
 

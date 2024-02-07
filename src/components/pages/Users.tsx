@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Tag, Dropdown, Menu, Input } from 'antd';
-import dataJson from './data.json'
+import dataJson from '../data/data.json'
 import {
   SearchOutlined,
   EditOutlined,

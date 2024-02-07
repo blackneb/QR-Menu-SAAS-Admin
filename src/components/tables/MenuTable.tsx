@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Table, Button, Modal, Input, Select, Popconfirm, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { ColumnProps } from 'antd/lib/table';
-import EditMenuItem from '../modals/EditMenuItem';
 import { EditOutlined, EyeOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import PreviewMenuModal from '../modals/PreviewMenuModal';
 
 
 interface MenuItem {
@@ -22,12 +20,14 @@ interface MenuTableProps {
 }
 
 const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
-  const uniqueCategories = [...new Set(data.map((item) => item.category))];
-  const [filteredData, setFilteredData] = useState<MenuItem[]>(data);
-  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
-  const [selectedRecord, setSelectedRecord] = useState<MenuItem | null>(null);
-  const [previewModalVisible, setPreviewModalVisible] = useState<boolean>(false);
-  const [selectedPreviewRecord, setSelectedPreviewRecord] = useState<MenuItem | null>(null);
+    const uniqueCategories = [...new Set(data.map((item) => item.category))];
+    const uniqueRestaurantIds = [...new Set(data.map((item) => item.restaurantId))];
+    const [filteredData, setFilteredData] = useState<MenuItem[]>(data);
+    const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+    const [selectedRecord, setSelectedRecord] = useState<MenuItem | null>(null);
+    const [previewModalVisible, setPreviewModalVisible] = useState<boolean>(false);
+    const [selectedPreviewRecord, setSelectedPreviewRecord] = useState<MenuItem | null>(null);
+    const [selectedRestaurantId, setSelectedRestaurantId] = useState<number | null>(null);
 
   const showPreviewModal = (record: MenuItem) => {
     setPreviewModalVisible(true);
@@ -66,6 +66,16 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
   const handleReset = (clearFilters: any) => {
     clearFilters();
     setFilteredData(data);
+  };
+
+  const handleRestaurantSelectChange = (value: number | null) => {
+    setSelectedRestaurantId(value);
+    if (value !== null) {
+      const filteredItems = data.filter((item) => item.restaurantId === value);
+      setFilteredData(filteredItems);
+    } else {
+      setFilteredData(data);
+    }
   };
 
   const getColumnSearchProps = (dataIndex: string) => ({
@@ -286,6 +296,19 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
 
   return (
     <div>
+        <Select
+        placeholder="Select Restaurant ID"
+        style={{ width: 200, marginBottom: 16 }}
+        onChange={handleRestaurantSelectChange}
+        value={selectedRestaurantId}
+      >
+        {uniqueRestaurantIds.map((id) => (
+          <Select.Option key={id} value={id}>
+            {id}
+          </Select.Option>
+        ))}
+      </Select>
+
       <Table
         dataSource={filteredData}
         columns={columns as ColumnProps<MenuItem>[]}
@@ -298,7 +321,6 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
         onCancel={handleEditModalCancel}
         okButtonProps={{ style: { backgroundColor: '#800020' } }} 
       >
-        <EditMenuItem selectedRecord={selectedRecord} />
       </Modal>
 
       <Modal
@@ -307,7 +329,6 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
         onCancel={hidePreviewModal}
         footer={null}
       >
-        <PreviewMenuModal selectedPreviewRecord={selectedPreviewRecord} />
       </Modal>
     </div>
   );

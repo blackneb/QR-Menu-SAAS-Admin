@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Table, Button, Modal, Tag, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import resdata from './resdata.json';
+import resdata from '../data/resdata.json';
 
 interface Restaurant {
   id: number;
