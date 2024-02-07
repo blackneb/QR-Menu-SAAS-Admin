@@ -118,19 +118,6 @@ const Restaurants: React.FC = () => {
         />
       ),
     },
-    {
-      title: 'Delete',
-      key: 'delete',
-      render: (record: Restaurant) => (
-        <Button
-          type="text"
-          style={{ color: 'red' }}
-          onClick={() => handleDelete(record)}
-        >
-          Delete
-        </Button>
-      ),
-    },
   ];
 
   function getColumnSearchProps(dataIndex: string) {

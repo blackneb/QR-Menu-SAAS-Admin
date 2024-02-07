@@ -25,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = () => {
   };
 
   return (
-    <nav className="bg-white h-16 mt-0 fixed w-full z-20 top-0 start-0 ">
+    <nav className="bg-white h-16 mt-0 shadow-md fixed w-full z-20 top-0 start-0 ">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto">
         <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
@@ -41,10 +41,7 @@ const Navbar: React.FC<NavbarProps> = () => {
             </>
             ):(
             <>
-              <Button type="primary" className="rounded-lg" style={{ backgroundColor: '#800020', borderColor: '#800020', marginRight: 4 }} onClick={()=>{ navigate("/createaccount") }}>
-                Get started
-              </Button>
-              <Button type="text" className="text-black" style={{ color: '#800020' }} onClick={()=>{ navigate("/login") }}>
+              <Button type="text" className="text-black" style={{ color: '#800020' }}>
                 Log in
               </Button>
             </>
@@ -81,7 +78,7 @@ const Navbar: React.FC<NavbarProps> = () => {
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-white md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
               <li>
                 <Link to="/" className="block py-2 px-3 text-black rounded md:text-black md:p-0" aria-current="page">
-                   User Dashboard
+                   Admin Dashboard
                 </Link>
               </li>
             </ul>
@@ -91,10 +88,10 @@ const Navbar: React.FC<NavbarProps> = () => {
             <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-white md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
               <li>
                 <Link to="/" className="block py-2 px-3 text-black rounded md:text-black md:p-0" aria-current="page">
-                  Home
+                  Admin DashBoard
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/about" className="block py-2 px-3 text-black rounded hover:bg-gray-200 md:hover:bg-transparent md:hover:text-black md:p-0">
                   About
                 </Link>
@@ -108,7 +105,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                 <Link to="/contact" className="block py-2 px-3 text-black rounded hover:bg-gray-200 md:hover:bg-transparent md:hover:text-black md:p-0">
                   Contact
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </>
           )}

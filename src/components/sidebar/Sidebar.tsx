@@ -13,9 +13,10 @@ import {
 import Navbar from '../navbar/Navbar';
 import Routing from '../routing/Routing';
 import { useSelector } from 'react-redux';
-import Users from '../pages/Users';
-import Restaurants from '../pages/Restaurants';
-import Registration from '../pages/Registration';
+import RegistrationTabs from '../pages/RegistrationTabs';
+import RestaurantsTabs from '../pages/RestaurantsTabs';
+import UserTabs from '../pages/UserTabs';
+import ProfileManagementTabs from '../pages/ProfileManagementTabs';
 
 const { Header, Sider, Content } = Layout;
 
@@ -35,13 +36,13 @@ const Sidebar: React.FC = () => {
   const renderContent = () => {
     switch (selectedMenuItem) {
       case '1':
-        return <Users/>;
+        return <UserTabs/>;
       case '2':
-        return <Restaurants/>;
+        return <RestaurantsTabs/>;
       case '3':
-        return <Registration/>;
+        return < RegistrationTabs/>;
       case '4':
-        return <div>Content for Profile Management</div>;
+        return <ProfileManagementTabs/>;
       case '5':
         return <div>Content for Analytics</div>;
       case '6':
