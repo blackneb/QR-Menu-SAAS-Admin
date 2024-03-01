@@ -1,14 +1,36 @@
 import React from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { createData, ApiResponse } from '../../api/Api'; 
+import { useSelector } from 'react-redux';
 
 interface RegistrationProps {}
 
 const RestaurantRegistration: React.FC<RegistrationProps> = () => {
+  const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const onFinish = async (values: any) => {
+    try {
+      // Extract restaurant data from form values
+      const restaurantData = {
+        name: values.name,
+        address: values.address,
+        contact_info: values.phone,
+        logo_url: values.image[0].response.url,  // Assuming your backend returns the URL after successful upload
+        url: values.url,
+      };
 
-  const onFinish = (values: any) => {
-    // Handle registration logic here
-    console.log('Received values:', values);
+      // Assuming you have the API URL and token
+      const apiUrl = 'http://nasjk.pythonanywhere.com/restorant/add-restorant/';
+
+      // Send the form data to the backend API using createData function
+      const response: ApiResponse<any> | null = await createData(apiUrl, restaurantData, token);
+      
+      // Handle success response (e.g., show a success message)
+      console.log('Registration successful:', response);
+    } catch (error) {
+      // Handle error (already handled in createData function)
+      console.error('Registration failed:', error);
+    }
   };
 
   const normFile = (e: any) => {
@@ -46,41 +68,32 @@ const RestaurantRegistration: React.FC<RegistrationProps> = () => {
         labelAlign="left"
         labelWrap
       >
-
         {/* Restaurant Section */}
         <h2 className="text-lg font-bold mb-4" style={{ color:"#800020" }}>Restaurant Form</h2>
         <Form.Item
           label="Restaurant Name"
-          name={['restaurant', 'restaurantName']}
+          name="name"
           rules={[{ required: true, message: 'Please input the restaurant name!' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Email"
-          name={['restaurant', 'email']}
-          rules={[{ required: true, type: 'email', message: 'Please input a valid email address!' }]}
-        >
-          <Input />
-        </Form.Item>
-        {/* Add other restaurant fields as needed */}
-        <Form.Item
           label="Phone"
-          name={['restaurant', 'phone']}
+          name="phone"
           rules={[{ required: true, message: 'Please input the phone number!' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           label="Address"
-          name={['restaurant', 'address']}
+          name="address"
           rules={[{ required: true, message: 'Please input the restaurant address!' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           label="Restaurant Image"
-          name={['restaurant', 'image']}
+          name="image"
           valuePropName="fileList"
           getValueFromEvent={normFile}
           rules={[{ required: true, message: 'Please Upload image!' }]}
@@ -89,7 +102,13 @@ const RestaurantRegistration: React.FC<RegistrationProps> = () => {
             <Button icon={<UploadOutlined />}>Upload Image</Button>
           </Upload>
         </Form.Item>
-
+        <Form.Item
+          label="Website URL"
+          name="url"
+          rules={[{ required: true, message: 'Please input the restaurant website URL!' }]}
+        >
+          <Input />
+        </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit" style={{ backgroundColor:"#800020", borderColor:"#800020" }}>
             Register

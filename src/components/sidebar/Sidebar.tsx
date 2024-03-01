@@ -12,7 +12,6 @@ import {
   BellOutlined,
 } from '@ant-design/icons';
 import Navbar from '../navbar/Navbar';
-import Routing from '../routing/Routing';
 import RegistrationTabs from '../tabs/RegistrationTabs';
 import RestaurantsTabs from '../tabs/RestaurantsTabs';
 import UserTabs from '../tabs/UserTabs';
@@ -28,7 +27,7 @@ const { Header, Sider, Content } = Layout;
 
 const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const location = useLocation();
+  // const location = useLocation();
   const [selectedMenuItem, setSelectedMenuItem] = useState<string>('users'); // Default selected menu item
   const userLoggedIn = useSelector((state: any) => state.userInformation.userLogged);
 

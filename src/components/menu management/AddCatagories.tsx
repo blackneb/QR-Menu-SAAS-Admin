@@ -21,12 +21,12 @@ const AddCategories: React.FC = () => {
         }
       };
     
-      const normFile = (e:any) => {
-        if (Array.isArray(e)) {
-          return e;
-        }
-        return e && e.fileList;
-      };
+      // const normFile = (e:any) => {
+      //   if (Array.isArray(e)) {
+      //     return e;
+      //   }
+      //   return e && e.fileList;
+      // };
   return (
     <section className="flex flex-row mt-8 md:flex-col justify-center items-center">
       <div className="bg-white shadow-md px-8 flex items-center rounded-2xl justify-center w-full md:w-1/2 lg:w-1/3">

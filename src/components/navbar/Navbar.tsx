@@ -15,7 +15,7 @@ const Navbar: React.FC<NavbarProps> = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const userLoggedIn = useSelector((state:any) => state.userInformation.userLogged)
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const showDrawer = () => {
     setDrawerOpen(true);
   };

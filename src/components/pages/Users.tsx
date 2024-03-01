@@ -20,9 +20,9 @@ interface User {
   restaurantName: string;
 }
 
-interface UsersTableProps {
-  data: User[];
-}
+// interface UsersTableProps {
+//   data: User[];
+// }
 
 const Users: React.FC = () => {
   const data = dataJson;

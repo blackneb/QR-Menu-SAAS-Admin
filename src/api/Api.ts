@@ -1,48 +1,69 @@
 import axios, { AxiosResponse } from 'axios';
+import { notification } from 'antd';
 
-interface ApiResponse {
-  id: number;
+// Updated ApiResponse interface with a generic type parameter
+export interface ApiResponse<T> {
+  data: T;
 }
 
-// Function to perform GET request
-const fetchData = async (apiUrl: string): Promise<ApiResponse | null> => {
+// Function to show an Ant Design notification for errors
+const showErrorNotification = (message: string) => {
+  notification.error({
+    message: 'Error',
+    description: message,
+  });
+};
+
+// Function to retrieve the token from Redux
+// Function to perform GET request with Bearer token
+const fetchData = async <T>(apiUrl: string, token: string): Promise<ApiResponse<T> | null> => {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.get(apiUrl);
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response: AxiosResponse<ApiResponse<T>> = await axios.get(apiUrl, { headers });
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error fetching data:', error);
+    showErrorNotification(`Failed to fetch data. ${error.response?.data.message || 'Please try again.'}`);
     return null;
   }
 };
 
-// Function to perform POST request
-const createData = async (apiUrl: string, newData: object): Promise<ApiResponse | null> => {
+// Function to perform POST request with Bearer token
+const createData = async <T>(apiUrl: string, newData: object, token: string): Promise<ApiResponse<T> | null> => {
+  console.log(newData);
+  console.log(token)
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.post(apiUrl, newData);
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response: AxiosResponse<ApiResponse<T>> = await axios.post(apiUrl, newData, { headers });
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error creating data:', error);
+    showErrorNotification(`Failed to create data. ${error.response?.data.message || 'Please try again.'}`);
     return null;
   }
 };
 
-// Function to perform PUT request
-const updateData = async (apiUrl: string, updatedData: object): Promise<ApiResponse | null> => {
+// Function to perform PUT request with Bearer token
+const updateData = async <T>(apiUrl: string, updatedData: object, token: string): Promise<ApiResponse<T> | null> => {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.put(apiUrl, updatedData);
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response: AxiosResponse<ApiResponse<T>> = await axios.put(apiUrl, updatedData, { headers });
     return response.data;
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error updating data:', error);
+    showErrorNotification(`Failed to update data. ${error.response?.data.message || 'Please try again.'}`);
     return null;
   }
 };
 
-// Function to perform DELETE request
-const deleteData = async (apiUrl: string): Promise<void> => {
+// Function to perform DELETE request with Bearer token
+const deleteData = async (apiUrl: string, token: string): Promise<void> => {
   try {
-    await axios.delete(apiUrl);
-  } catch (error) {
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    await axios.delete(apiUrl, { headers });
+  } catch (error:any) {
     console.error('Error deleting data:', error);
+    showErrorNotification(`Failed to delete data. ${error.response?.data.message || 'Please try again.'}`);
   }
 };
 

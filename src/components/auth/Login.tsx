@@ -4,7 +4,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { add_user_information } from '../../redux/Actions';
-
+import axios from 'axios';
+import { notification } from 'antd'; 
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -12,27 +13,49 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
 
   const onFinish = async (values: any) => {
-    console.log(values);
-
     try {
       setLoading(true);
-      // Add your authentication logic here, e.g., make an API request
-      // Simulate a delay for demonstration purposes (remove in a real application)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      navigate("/users")
-      const json = {
-        userLogged: true,
-        username: "Jhon Doe",
-      };
-
-      dispatch(add_user_information(json));
-      console.log('Authentication successful!');
-    } catch (error: any) {
-      console.error('Authentication failed:', error.message);
-    } finally {
+      const apiUrl = 'http://nasjk.pythonanywhere.com/users/login';
+      const profileApiUrl = 'http://nasjk.pythonanywhere.com/users/profile';
+      const apiDataSend = {
+        email: values.username,
+        password: values.password
+      }
+      const response = await axios.post(apiUrl, apiDataSend);
+      try {
+        const res = await axios.get(profileApiUrl, {
+          headers: {
+            Authorization: `Bearer ${response.data.token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        const userInformation = {
+          userLogged: true,
+          userprofile: response.data,
+          profile:res.data
+        };
+  
+          // Dispatch user information to Redux store
+          dispatch(add_user_information(userInformation));
+      } catch (error) {
+        console.log(error);
+      }
+      setLoading(false);
+    } catch (error:any) {
+      console.log(error);
+      notification.warning({
+        message: error.response.data.Message[0],
+        duration: 5,
+        onClose: () => {
+          console.log('Notification closed');
+        },
+      });
       setLoading(false);
     }
-  };
+    finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex items-center justify-center h-screen w-full" style={{ height: "80vh" }}>

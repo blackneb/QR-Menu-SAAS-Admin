@@ -32,6 +32,8 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
   const showPreviewModal = (record: MenuItem) => {
     setPreviewModalVisible(true);
     setSelectedPreviewRecord(record);
+    console.log(selectedRecord)
+    console.log(selectedPreviewRecord)
   };
 
   const hidePreviewModal = () => {

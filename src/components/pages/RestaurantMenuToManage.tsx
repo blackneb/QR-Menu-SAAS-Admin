@@ -12,9 +12,9 @@ interface Restaurant {
   dateCreated: string;
 }
 
-interface RestaurantsTableProps {
-  data: Restaurant[];
-}
+// interface RestaurantsTableProps {
+//   data: Restaurant[];
+// }
 
 const RestaurantMenuToManage: React.FC = () => {
   const data: Restaurant[] = resdata;
