@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Tag, Input } from 'antd';
 import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { fetchData } from '../../api/Api'; 
+import { fetchData, ApiResponse } from '../../api/Api'; 
 import { useSelector } from 'react-redux';
+import { MAIN_URL } from '../../redux/ActionTypes';
 
 interface Restaurant {
   id: number;
@@ -14,10 +15,6 @@ interface Restaurant {
   registrationDate: string;
 }
 
-interface ApiResponse<T> {
-  data: T;
-}
-
 const Restaurants: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
@@ -25,7 +22,6 @@ const Restaurants: React.FC = () => {
   const [selectedRecord, setSelectedRecord] = useState<Restaurant | null>(null);
   const [searchInput, setSearchInput] = useState<string>(''); // Add selectedKeys state
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
-
   const handleEdit = (record: Restaurant) => {
     setEditModalVisible(true);
     setSelectedRecord(record);
@@ -162,13 +158,13 @@ const Restaurants: React.FC = () => {
 
   useEffect(() => {
     const fetchRestaurantData = async () => {
-      const apiUrl = 'http://nasjk.pythonanywhere.com/restorant/add-restorant/';
+      const apiUrl = MAIN_URL + 'restorant/add-restorant/';
   
       try {
-        const result: ApiResponse<Restaurant[]> = await fetchData<Restaurant[]>(apiUrl, token);
-  
-        if (result && result.data) {
-          setData(result.data);
+        const result: any | null = await fetchData<Restaurant[]>(apiUrl, token);
+        
+        if (result !== null) {
+          setData(result);
         }
       } catch (error) {
         // Handle error, e.g., log or show a notification

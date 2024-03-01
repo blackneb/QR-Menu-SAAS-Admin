@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Tag, Input } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import resdata from '../data/resdata.json';
+import { fetchData, ApiResponse } from '../../api/Api'; 
+import { useSelector } from 'react-redux';
+import { MAIN_URL } from '../../redux/ActionTypes';
+import { useNavigate } from 'react-router-dom';
 
 interface Restaurant {
   id: number;
@@ -12,16 +14,31 @@ interface Restaurant {
   dateCreated: string;
 }
 
-// interface RestaurantsTableProps {
-//   data: Restaurant[];
-// }
-
 const RestaurantMenuToManage: React.FC = () => {
-  const data: Restaurant[] = resdata;
-  const navigate = useNavigate()
-  const [filteredData, setFilteredData] = useState<Restaurant[]>(data.filter(record => record.status === 'active'));
+  const navigate = useNavigate();
+  const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const [data, setData] = useState<Restaurant[]>([]);
+  const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<Restaurant | null>(null);
+
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      const apiUrl = MAIN_URL + 'restorant/add-restorant/';
+      try {
+        const result: any | null = await fetchData<Restaurant[]>(apiUrl, token);
+        
+        if (result !== null) {
+          setData(result);
+        }
+      } catch (error) {
+        // Handle error, e.g., log or show a notification
+        console.error("Error fetching restaurant data:", error);
+      }
+    };
+
+    fetchRestaurantData();
+  }, [token]);
 
   const handleEdit = (record: Restaurant) => {
     setEditModalVisible(true);
@@ -47,32 +64,43 @@ const RestaurantMenuToManage: React.FC = () => {
     },
     {
       title: 'Restaurant Name',
-      dataIndex: 'restaurantName',
-      key: 'restaurantName',
+      dataIndex: 'name',
+      key: 'name',
       ...getColumnSearchProps('restaurantName'),
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-      ...getColumnSearchProps('email'),
+      title: 'Contact Info',
+      dataIndex: 'contact_info',
+      key: 'contact_info',
+      ...getColumnSearchProps('contact_info'),
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => (
-        <Tag color={status === 'active' ? 'green' : 'red'} className='flex items-center justify-center w-'>
-          {status === 'active' ? (
-            <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} />
-          ) : (
-            <CloseCircleOutlined style={{ color: 'red', marginRight: '5px' }} />
-          )}
-          {status}
+      render: () => (
+        <Tag color="green" className='flex items-center justify-center w-'>
+          <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} />
+          Active
         </Tag>
       ),
-      sorter: (a: Restaurant, b: Restaurant) => a.status.localeCompare(b.status),
     },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (status: string) => (
+    //     <Tag color={status === 'active' ? 'green' : 'red'} className='flex items-center justify-center w-'>
+    //       {status === 'active' ? (
+    //         <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} />
+    //       ) : (
+    //         <CloseCircleOutlined style={{ color: 'red', marginRight: '5px' }} />
+    //       )}
+    //       {status}
+    //     </Tag>
+    //   ),
+    //   sorter: (a: Restaurant, b: Restaurant) => a.status.localeCompare(b.status),
+    // },
     {
       title: 'Edit Menu',
       key: 'edit',
@@ -81,7 +109,7 @@ const RestaurantMenuToManage: React.FC = () => {
           type="text"
           style={{ color: 'green' }}
           icon={<EditOutlined />}
-          onClick={() => navigate("/restaurants/4")}
+          onClick={() => navigate(`/restaurants/${record.id}`)}
         />
       ),
     },
@@ -135,7 +163,7 @@ const RestaurantMenuToManage: React.FC = () => {
   return (
     <div>
       <Table
-        dataSource={filteredData}
+        dataSource={filteredData.length > 0 ? filteredData : data}
         columns={columns}
         pagination={{ pageSize: 10 }}
         rowKey={(record) => record.id.toString()}

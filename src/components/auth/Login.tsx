@@ -3,6 +3,7 @@ import { Form, Input, Button, Card } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { MAIN_URL } from '../../redux/ActionTypes';
 import { add_user_information } from '../../redux/Actions';
 import axios from 'axios';
 import { notification } from 'antd'; 
@@ -15,8 +16,8 @@ const Login: React.FC = () => {
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-      const apiUrl = 'http://nasjk.pythonanywhere.com/users/login';
-      const profileApiUrl = 'http://nasjk.pythonanywhere.com/users/profile';
+      const apiUrl =  MAIN_URL + 'users/login';
+      const profileApiUrl = MAIN_URL + 'users/profile';
       const apiDataSend = {
         email: values.username,
         password: values.password

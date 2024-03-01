@@ -1,14 +1,17 @@
-import React from 'react';
-import { Form, Input, Button, Upload, message } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Upload, message, notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { createData, ApiResponse } from '../../api/Api'; 
 import { useSelector } from 'react-redux';
+import { MAIN_URL } from '../../redux/ActionTypes';
 
 interface RegistrationProps {}
 
 const RestaurantRegistration: React.FC<RegistrationProps> = () => {
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const [loading, setLoading] = useState(false)
   const onFinish = async (values: any) => {
+    setLoading(true)
     try {
       // Extract restaurant data from form values
       const restaurantData = {
@@ -20,16 +23,27 @@ const RestaurantRegistration: React.FC<RegistrationProps> = () => {
       };
 
       // Assuming you have the API URL and token
-      const apiUrl = 'http://nasjk.pythonanywhere.com/restorant/add-restorant/';
+      const apiUrl = MAIN_URL + 'restorant/add-restorant/';
 
       // Send the form data to the backend API using createData function
       const response: ApiResponse<any> | null = await createData(apiUrl, restaurantData, token);
       
       // Handle success response (e.g., show a success message)
-      console.log('Registration successful:', response);
+      if (response !== null) {
+        console.log('Registration successful:', response);
+
+        // Display success notification
+        notification.success({
+          message: 'Registration Successful',
+          description: 'Restaurant has been registered successfully!',
+        });
+      }
+      notification.success
     } catch (error) {
       // Handle error (already handled in createData function)
       console.error('Registration failed:', error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -110,7 +124,7 @@ const RestaurantRegistration: React.FC<RegistrationProps> = () => {
           <Input />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" style={{ backgroundColor:"#800020", borderColor:"#800020" }}>
+          <Button type="primary" loading={loading} htmlType="submit" style={{ backgroundColor:"#800020", borderColor:"#800020" }}>
             Register
           </Button>
         </Form.Item>

@@ -1,34 +1,39 @@
-// Registration.tsx
-
-import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import React, {useState} from 'react';
+import { Form, Input, Button, message, notification } from 'antd';
 import { createData, ApiResponse } from '../../api/Api'; 
 import { useSelector } from 'react-redux'; 
+import { MAIN_URL } from '../../redux/ActionTypes';
 interface RegistrationProps {}
 
 const Registration: React.FC<RegistrationProps> = () => {
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const [loading, setLoading] = useState(false)
   const onFinish = async (values: any) => {
+    setLoading(true)
     try {
       // Extract user data from form values
-      const userData = {
-        email: values.email,
-        password: values.password, // Assuming you have a password field in your form
-        restaurant_id: values.restaurant_id, // Change this based on the selected restaurant or your logic
-        mobile: values.mobile, // Assuming you have a mobile field in your form
-      };
-
       // Assuming you have the API URL and token
-      const apiUrl = 'http://nasjk.pythonanywhere.com/users/register-user';
+      const apiUrl = MAIN_URL + 'users/register-user';
 
       // Send the form data to the backend API using createData function
-      const response: ApiResponse<any> | null = await createData(apiUrl, userData, token);
-      
+      const response: ApiResponse<any> | null = await createData(apiUrl, values, token);
+      if (response !== null) {
+        console.log('Registration successful:', response);
+
+        // Display success notification
+        notification.success({
+          message: 'Registration Successful',
+          description: 'User has been registered successfully!',
+        });
+      }
       // Handle success response (e.g., show a success message)
       console.log('Registration successful:', response);
     } catch (error) {
       // Handle error (already handled in createData function)
       console.error('Registration failed:', error);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -45,6 +50,13 @@ const Registration: React.FC<RegistrationProps> = () => {
       >
         {/* User Section */}
         <h2 className="text-lg font-bold mb-4" style={{color:"#800020"}}>User Form</h2>
+        <Form.Item
+          label="Username"
+          name="username"
+          rules={[{ required: true, message: 'Please input your username!' }]}
+        >
+          <Input />
+        </Form.Item>
         <Form.Item
           label="Email"
           name="email"
@@ -77,7 +89,7 @@ const Registration: React.FC<RegistrationProps> = () => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" style={{ backgroundColor:"#800020", borderColor:"#800020" }}>
+          <Button type="primary" htmlType="submit" loading={loading} style={{ backgroundColor:"#800020", borderColor:"#800020" }}>
             Register
           </Button>
         </Form.Item>
