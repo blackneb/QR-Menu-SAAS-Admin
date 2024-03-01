@@ -1,11 +1,12 @@
 import { combineReducers, createStore } from "redux";
 import {composeWithDevTools} from '@redux-devtools/extension';
 
-import { addUserInformationReducer } from "./Reducer";
+import { addUserInformationReducer, addSelectedRestaurant } from "./Reducer";
 
 const reducers = combineReducers(
     {
         userInformation:addUserInformationReducer,
+        selectedRestaurant:addSelectedRestaurant,
     }
 );
 
