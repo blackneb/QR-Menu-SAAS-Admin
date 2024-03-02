@@ -1,6 +1,5 @@
 import React from 'react';
 import MenuTable from '../tables/MenuTable';
-import menuData from './menu.json'
 const MenuList: React.FC = () => {
 
   return (

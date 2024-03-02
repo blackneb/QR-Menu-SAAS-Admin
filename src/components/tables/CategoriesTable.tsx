@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Spin, Button, Popconfirm,Modal } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { fetchData, ApiResponse } from '../../api/Api';
 import { useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import EditCategoryModal from '../modals/EditCategoryModal';
+
 
 interface MenuItem {
   id: number;
@@ -15,13 +18,17 @@ interface MenuItem {
 }
 
 const CategoryTable: React.FC = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<MenuItem[]>([]);
-  const token = useSelector((state:any) => state.userInformation.userprofile.token)
-  const selectedRestaurantID = useSelector((state:any) => state.selectedRestaurant.id)
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<MenuItem | null>(null);
+
+  const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const selectedRestaurantID = useSelector((state: any) => state.selectedRestaurant.id);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        // Replace 'apiUrl' with your actual API endpoint
+        setLoading(true);
         const apiUrl = MAIN_URL +  `/menu/restaurants/${selectedRestaurantID}/menus/`;
         const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
 
@@ -30,11 +37,38 @@ const CategoryTable: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCategories();
   }, []);
+
+  const handleEdit = (record: MenuItem) => {
+    setSelectedCategory(record);
+    setEditModalVisible(true);
+  };
+
+  const handleDelete = (record: MenuItem) => {
+    // Implement your delete logic here
+    console.log('Delete', record);
+  };
+
+  const handleEditModalCancel = () => {
+    setEditModalVisible(false);
+    setSelectedCategory(null);
+  };
+
+  const handleEditModalOk = (updatedCategory: MenuItem) => {
+    // Handle the update logic here
+    console.log('Updated Category:', updatedCategory);
+
+    // Close the modal
+    setEditModalVisible(false);
+    setSelectedCategory(null);
+  };
+
 
   const columns: ColumnsType<MenuItem> = [
     {
@@ -62,9 +96,61 @@ const CategoryTable: React.FC = () => {
         </Tag>
       ),
     },
+    {
+      title: 'Edit',
+      key: 'edit',
+      render: (record: MenuItem) => (
+        <Button type="text" icon={<EditOutlined />} style={{ color: 'green' }} onClick={() => handleEdit(record)} />
+      ),
+    },
+    {
+      title: 'Delete',
+      key: 'delete',
+      render: (record: MenuItem) => (
+        <Popconfirm
+          title="Are you sure you want to delete this menu item?"
+          onConfirm={() => handleDelete(record)}
+          okText="Yes"
+          okButtonProps={{ style: { background: '#800020', color: 'white', borderColor: '#800020' } }}
+          cancelText="No"
+        >
+          <Button
+            style={{ color: 'red' }}
+            type="text"
+            icon={<DeleteOutlined />}
+          />
+        </Popconfirm>
+      ),
+    },
   ];
 
-  return <Table dataSource={data} columns={columns} pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }} />;
+  return (
+    <Spin spinning={loading}>
+      <Table dataSource={data} columns={columns} pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }} />
+      <Modal
+        title="Edit Category"
+        visible={editModalVisible}
+        onCancel={handleEditModalCancel}
+        footer={[
+          <Button key="cancel" onClick={handleEditModalCancel}>
+            Cancel
+          </Button>,
+          <Button key="save" type="primary" style={{ background: '#800020', borderColor: '#800020' }}>
+            Save
+          </Button>,
+        ]}
+      >
+        <EditCategoryModal
+          category={selectedCategory}
+          visible={editModalVisible}
+          onCancel={handleEditModalCancel}
+          onOk={handleEditModalOk}
+        />
+      </Modal>
+      
+    </Spin>
+  );
+  
 };
 
 export default CategoryTable;

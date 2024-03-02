@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Tag, Input } from 'antd';
+import { Table, Button, Modal, Tag, Input, Spin } from 'antd';
 import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { fetchData, ApiResponse } from '../../api/Api'; 
 import { useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
+import EditRestaurant from '../modals/EditRestaurant';
 
 interface Restaurant {
   id: number;
@@ -16,6 +17,7 @@ interface Restaurant {
 }
 
 const Restaurants: React.FC = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
@@ -169,6 +171,8 @@ const Restaurants: React.FC = () => {
       } catch (error) {
         // Handle error, e.g., log or show a notification
         console.error("Error fetching restaurant data:", error);
+      }finally {
+        setLoading(false);
       }
     };
   
@@ -177,19 +181,32 @@ const Restaurants: React.FC = () => {
 
   return (
     <div>
-      <Table
-        dataSource={filteredData.length > 0 ? filteredData : data}
-        columns={columns}
-        pagination={{ pageSize: 10 }}
-        rowKey={(record) => record.id.toString()}
-      />
+      {loading ? (
+        <Spin />
+      ) : (
+        <Table
+          dataSource={filteredData.length > 0 ? filteredData : data}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
+          rowKey={(record) => record.id.toString()}
+        />
+      )}
       <Modal
         title="Edit Restaurant"
         visible={editModalVisible}
         onCancel={handleEditModalCancel}
+        footer={[
+          <Button key="cancel" onClick={handleEditModalCancel}>
+            Cancel
+          </Button>,
+          <Button key="save" type="primary" style={{ background: '#800020', borderColor: '#800020' }}>
+            Save
+          </Button>,
+        ]}
       >
-        {/* Add your EditRestaurant component or form here */}
-        {/* For example: <EditRestaurantForm record={selectedRecord} onCancel={handleEditModalCancel} /> */}
+        {selectedRecord && (
+          <EditRestaurant record={selectedRecord} onCancel={handleEditModalCancel} />
+        )}
       </Modal>
     </div>
   );

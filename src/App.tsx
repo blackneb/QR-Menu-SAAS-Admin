@@ -1,4 +1,3 @@
-import Routing from "./components/routing/Routing"
 import Sidebar from "./components/sidebar/Sidebar"
 
 function App() {

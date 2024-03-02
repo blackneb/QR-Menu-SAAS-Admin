@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Table, Button, Modal, Tag, Dropdown, Menu, Input } from 'antd';
-import dataJson from '../data/data.json'
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Modal, Tag, Dropdown, Menu, Input,Spin } from 'antd';
 import {
   SearchOutlined,
   EditOutlined,
@@ -9,35 +8,82 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from '@ant-design/icons';
+import axios, { AxiosResponse } from 'axios';
+import { fetchData, ApiResponse } from '../../api/Api';
+import { MAIN_URL } from '../../redux/ActionTypes';
+import { useSelector } from 'react-redux';
+import EditUser from '../modals/EditUser';
+import ViewUser from '../modals/ViewUser';
 
 interface User {
   id: number;
-  firstName: string;
-  lastName: string;
+  username: string;
   email: string;
-  status: string;
-  registeredAt: string;
-  restaurantName: string;
+  mobile: string;
+  restaurant_name: string;
+  is_staff: boolean;
+  is_superuser: boolean;
 }
-
 // interface UsersTableProps {
 //   data: User[];
 // }
 
 const Users: React.FC = () => {
-  const data = dataJson;
-  const [filteredData, setFilteredData] = useState<User[]>(data);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<User[]>([]);
+  const [filteredData, setFilteredData] = useState<User[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);
+  const [addModalVisible, setAddModalVisible] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<User | null>(null);
+  const token = useSelector((state: any) => state.userInformation.userprofile.token);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const apiUrl = MAIN_URL + 'users/restaurantadmins/';
+        const result: any | null = await fetchData<User[]>(apiUrl, token);
+
+        if (result !== null) {
+          setData(result);
+          setFilteredData(result);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+      finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   const handleEdit = (record: User) => {
     setEditModalVisible(true);
     setSelectedRecord(record);
   };
 
+  const handleView = (record: User) => {
+    setViewModalVisible(true);
+    setSelectedRecord(record);
+  };
+
+  const handleAdd = () => {
+    setAddModalVisible(true);
+  };
+
   const handleEditModalCancel = () => {
     setEditModalVisible(false);
     setSelectedRecord(null);
+  };
+
+  const handleViewModalCancel = () => {
+    setViewModalVisible(false);
+    setSelectedRecord(null);
+  };
+
+  const handleAddModalCancel = () => {
+    setAddModalVisible(false);
   };
 
   const handleDelete = (record: User) => {
@@ -62,16 +108,10 @@ const Users: React.FC = () => {
       sorter: (a: User, b: User) => a.id - b.id,
     },
     {
-      title: 'First Name',
-      dataIndex: 'firstName',
-      key: 'firstName',
-      ...getColumnSearchProps('firstName'),
-    },
-    {
-      title: 'Last Name',
-      dataIndex: 'lastName',
-      key: 'lastName',
-      ...getColumnSearchProps('lastName'),
+      title: 'Username',
+      dataIndex: 'username',
+      key: 'username',
+      ...getColumnSearchProps('username'),
     },
     {
       title: 'Email',
@@ -80,32 +120,52 @@ const Users: React.FC = () => {
       ...getColumnSearchProps('email'),
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => (
-        <Tag color={status === 'active' ? 'green' : 'red'} className='flex items-center justify-center'>
-          {status === 'active' ? (
-            <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} />
-          ) : (
-            <CloseCircleOutlined style={{ color: 'red', marginRight: '5px' }} />
-          )}
-          {status}
-        </Tag>
-      ),
-      sorter: (a: User, b: User) => a.status.localeCompare(b.status),
-    },
-    {
-      title: 'Registered At',
-      dataIndex: 'registeredAt',
-      key: 'registeredAt',
-      sorter: (a: User, b: User) => a.registeredAt.localeCompare(b.registeredAt),
+      title: 'Mobile',
+      dataIndex: 'mobile',
+      key: 'mobile',
+      ...getColumnSearchProps('mobile'),
     },
     {
       title: 'Restaurant Name',
-      dataIndex: 'restaurantName',
-      key: 'restaurantName',
+      dataIndex: 'restaurant_name',
+      key: 'restaurant_name',
+      render: (restaurant_name: string) => (
+        <Tag color="purple" className='flex items-center justify-center'>
+          {restaurant_name}
+        </Tag>
+      ),
       ...getColumnSearchProps('restaurantName'),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: () => (
+        <Tag color='green' className='flex items-center justify-center'>
+          <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} />
+          Active
+        </Tag>
+      ),
+    },
+    {
+      title: 'Is Staff',
+      dataIndex: 'is_staff',
+      key: 'is_staff',
+      render: (is_staff: boolean) => (
+        <Tag color={is_staff ? 'green' : 'red'} className='flex items-center justify-center'>
+          {is_staff ? 'Yes' : 'No'}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Is Superuser',
+      dataIndex: 'is_superuser',
+      key: 'is_superuser',
+      render: (is_superuser: boolean) => (
+        <Tag color={is_superuser ? 'green' : 'red'} className='flex items-center justify-center'>
+          {is_superuser ? 'Yes' : 'No'}
+        </Tag>
+      ),
     },
     {
       title: 'View',
@@ -115,7 +175,7 @@ const Users: React.FC = () => {
           type="text"
           style={{ color: '#800020' }}
           icon={<EyeOutlined />}
-          // Add the logic to handle view action here
+          onClick={() => handleView(record)}
         />
       ),
     },
@@ -148,6 +208,7 @@ const Users: React.FC = () => {
       ),
     },
   ];
+  
 
 
   function getColumnSearchProps(dataIndex: string) {
@@ -198,20 +259,46 @@ const Users: React.FC = () => {
   
   return (
     <div>
-      <Table
-        dataSource={filteredData}
-        columns={columns}
-        pagination={{ pageSize: 10 }}
-        rowKey={(record) => record.id.toString()}
-      />
+      {loading ? (
+        <Spin/>
+      ) : (
+        <Table
+          dataSource={filteredData}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
+          rowKey={(record) => record.id.toString()}
+        />
+      )}
       <Modal
         title="Edit User"
         visible={editModalVisible}
         onCancel={handleEditModalCancel}
-        // Add any additional properties or styling as needed
+        footer={[
+          <Button key="cancel" onClick={handleEditModalCancel}>
+            Cancel
+          </Button>,
+          <Button key="save" type="primary" style={{ background: '#800020', borderColor: '#800020' }}>
+            Save
+          </Button>,
+        ]}
       >
-        {/* Add your EditUser component or form here */}
+        <EditUser record={selectedRecord} onCancel={handleEditModalCancel} />
       </Modal>
+
+      <Modal
+        title="View User"
+        visible={viewModalVisible}
+        onCancel={handleViewModalCancel}
+        footer={[
+          <Button key="cancel" onClick={handleViewModalCancel}>
+            Close
+          </Button>,
+        ]}
+      >
+        <ViewUser record={selectedRecord} onCancel={handleViewModalCancel} />
+      </Modal>
+
+      
     </div>
   );
 };

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Input, Select, Popconfirm, Tag } from 'antd';
+import { Table, Button, Modal, Input, Select, Popconfirm, Tag, Spin } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { ColumnProps } from 'antd/lib/table';
 import { EditOutlined, EyeOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { fetchData, ApiResponse } from '../../api/Api';
 import { useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
+import ViewMenuItemModal from '../modals/ViewMenuItemModal';
+import EditMenuItemModal from '../modals/EditMenuItemModal';
+
 interface MenuItem {
   id: number;
   menuName: string;
@@ -16,21 +19,24 @@ interface MenuItem {
   status: string;
 }
 
-
 const MenuTable: React.FC = () => {
-    const [data, setData] = useState<MenuItem[]>([]);
-    const [filteredData, setFilteredData] = useState<MenuItem[]>(data);
-    const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
-    const [selectedRecord, setSelectedRecord] = useState<MenuItem | null>(null);
-    const [previewModalVisible, setPreviewModalVisible] = useState<boolean>(false);
-    const [selectedPreviewRecord, setSelectedPreviewRecord] = useState<MenuItem | null>(null);
-    const token = useSelector((state:any) => state.userInformation.userprofile.token)
-    const selectedRestaurantID = useSelector((state:any) => state.selectedRestaurant.id)
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<MenuItem[]>([]);
+  const [filteredData, setFilteredData] = useState<MenuItem[]>(data);
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const [selectedRecord, setSelectedRecord] = useState<MenuItem | null>(null);
+  const [previewModalVisible, setPreviewModalVisible] = useState<boolean>(false);
+  const [selectedPreviewRecord, setSelectedPreviewRecord] = useState<MenuItem | null>(null);
+  const [editMenuItemModalVisible, setEditMenuItemModalVisible] = useState<boolean>(false);
+
+  const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const selectedRestaurantID = useSelector((state: any) => state.selectedRestaurant.id);
 
     useEffect(() => {
       // Fetch menu items from the API when the component mounts
       const fetchMenuItems = async () => {
         try {
+          setLoading(true);
           const apiUrl = MAIN_URL + `/menu/restaurants/${selectedRestaurantID}/menu-items`; // Update with your API endpoint
   
           const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
@@ -41,42 +47,52 @@ const MenuTable: React.FC = () => {
         }
         } catch (error) {
           console.error('Error fetching menu items:', error);
+        } finally {
+          setLoading(false);
         }
       };
   
       fetchMenuItems();
     }, []);
 
-  const showPreviewModal = (record: MenuItem) => {
-    setPreviewModalVisible(true);
-    setSelectedPreviewRecord(record);
-    console.log(selectedRecord)
-    console.log(selectedPreviewRecord)
-  };
-
-  const hidePreviewModal = () => {
-    setPreviewModalVisible(false);
-    setSelectedPreviewRecord(null);
-  };
-
-  const handleEdit = (record: MenuItem) => {
-    setEditModalVisible(true);
-    setSelectedRecord(record);
-  };
-
-  const handleEditModalCancel = () => {
-    setEditModalVisible(false);
-    setSelectedRecord(null);
-  };
-
-  const handleDelete = (record: MenuItem) => {
-    // Implement your delete logic here
-    console.log('Delete', record);
-  };
-
-  const confirmDelete = (record: MenuItem) => {
-    handleDelete(record);
-  };
+    const showPreviewModal = (record: MenuItem) => {
+      setPreviewModalVisible(true);
+      setSelectedPreviewRecord(record);
+    };
+  
+    const hidePreviewModal = () => {
+      setPreviewModalVisible(false);
+      setSelectedPreviewRecord(null);
+    };
+  
+    const handleEdit = (record: MenuItem) => {
+      setEditModalVisible(true);
+      setSelectedRecord(record);
+    };
+  
+    const handleEditModalCancel = () => {
+      setEditModalVisible(false);
+      setSelectedRecord(null);
+    };
+  
+    const showEditMenuItemModal = (record: MenuItem) => {
+      setEditMenuItemModalVisible(true);
+      setSelectedRecord(record);
+    };
+  
+    const hideEditMenuItemModal = () => {
+      setEditMenuItemModalVisible(false);
+      setSelectedRecord(null);
+    };
+  
+    const handleDelete = (record: MenuItem) => {
+      // Implement your delete logic here
+      console.log('Delete', record);
+    };
+  
+    const confirmDelete = (record: MenuItem) => {
+      handleDelete(record);
+    };
 
   const handleSearch = (confirm: any) => {
     confirm();
@@ -281,7 +297,7 @@ const MenuTable: React.FC = () => {
         <Button
           type="text"
           style={{ color: 'green' }}
-          onClick={() => handleEdit(record)}
+          onClick={() => showEditMenuItemModal(record)}
           icon={<EditOutlined />}
         />
       ),
@@ -309,26 +325,42 @@ const MenuTable: React.FC = () => {
 
   return (
     <div>
-      <Table
-        dataSource={filteredData}
-        columns={columns as ColumnProps<MenuItem>[]}
-        pagination={{ pageSize: 10 }}
-        rowKey={(record) => record.id.toString()}
-      />
+      {loading ? (
+        <Spin/>
+      ) : (
+        <Table
+          dataSource={filteredData}
+          columns={columns as ColumnProps<MenuItem>[]}
+          pagination={{ pageSize: 10 }}
+          rowKey={(record) => record.id.toString()}
+        />
+      )}
       <Modal
         title="Edit Menu Item"
-        visible={editModalVisible}
-        onCancel={handleEditModalCancel}
-        okButtonProps={{ style: { backgroundColor: '#800020' } }} 
+        visible={editMenuItemModalVisible} // Corrected variable name
+        onCancel={hideEditMenuItemModal}
+        okButtonProps={{ style: { backgroundColor: '#800020' } }}
       >
+        <EditMenuItemModal
+          menuItem={selectedRecord}
+        />
       </Modal>
 
       <Modal
         title="Preview Menu Item"
         visible={previewModalVisible}
         onCancel={hidePreviewModal}
-        footer={null}
+        footer={[
+          <Button key="cancel" onClick={hidePreviewModal}>
+            Cancel
+          </Button>
+        ]}
       >
+        {selectedPreviewRecord && (
+          <ViewMenuItemModal
+          menuItem={selectedPreviewRecord}
+        />
+        )}
       </Modal>
     </div>
   );

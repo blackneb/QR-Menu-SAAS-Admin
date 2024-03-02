@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Tag, Input } from 'antd';
-import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { fetchData, ApiResponse } from '../../api/Api'; 
+import { Table, Button, Modal, Tag, Input, Spin } from 'antd';
+import { SearchOutlined, EditOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { fetchData } from '../../api/Api'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { add_selected_restaurant } from '../../redux/Actions';
 import { MAIN_URL } from '../../redux/ActionTypes';
@@ -19,6 +19,7 @@ const RestaurantMenuToManage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Restaurant[]>([]);
   const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
@@ -28,15 +29,18 @@ const RestaurantMenuToManage: React.FC = () => {
     const fetchRestaurantData = async () => {
       const apiUrl = MAIN_URL + 'restorant/add-restorant/';
       try {
+        setLoading(true);
         const result: any | null = await fetchData<Restaurant[]>(apiUrl, token);
         
         if (result !== null) {
           setData(result);
         }
       } catch (error) {
-        // Handle error, e.g., log or show a notification
         console.error("Error fetching restaurant data:", error);
+      }finally {
+        setLoading(false);
       }
+      
     };
 
     fetchRestaurantData();
@@ -171,22 +175,24 @@ const RestaurantMenuToManage: React.FC = () => {
   }
 
   return (
-    <div>
-      <Table
-        dataSource={filteredData.length > 0 ? filteredData : data}
-        columns={columns}
-        pagination={{ pageSize: 10 }}
-        rowKey={(record) => record.id.toString()}
-      />
-      <Modal
-        title="Edit Restaurant"
-        visible={editModalVisible}
-        onCancel={handleEditModalCancel}
-        // Add any additional properties or styling as needed
-      >
-        {/* Add your EditRestaurant component or form here */}
-      </Modal>
-    </div>
+    <Spin spinning={loading}>
+      <div>
+        <Table
+          dataSource={filteredData.length > 0 ? filteredData : data}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
+          rowKey={(record) => record.id.toString()}
+        />
+        <Modal
+          title="Edit Restaurant"
+          visible={editModalVisible}
+          onCancel={handleEditModalCancel}
+          // Add any additional properties or styling as needed
+        >
+          {/* Add your EditRestaurant component or form here */}
+        </Modal>
+      </div>
+    </Spin>
   );
 };
 
