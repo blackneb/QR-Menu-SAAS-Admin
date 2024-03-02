@@ -33,7 +33,7 @@ const AddMenuModal: React.FC = () => {
       <div className="bg-white shadow-md px-8 flex items-center rounded-2xl justify-center w-full md:w-1/2 lg:w-1/3">
         <div className="w-full h-100">
           <Form
-            name="changePasswordForm"
+            name="AddMenuForm"
             onFinish={onFinish}
             labelCol={{ flex: '150px', span: 30 }}
             labelAlign="left"

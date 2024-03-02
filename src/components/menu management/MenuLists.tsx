@@ -6,7 +6,7 @@ const MenuList: React.FC = () => {
   return (
     <div>
       <h1>Menu Items</h1>
-      <MenuTable data={menuData} />
+      <MenuTable/>
     </div>
   );
 };

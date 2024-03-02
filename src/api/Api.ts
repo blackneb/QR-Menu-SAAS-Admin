@@ -20,6 +20,7 @@ const fetchData = async <T>(apiUrl: string, token: string): Promise<ApiResponse<
   try {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const response: AxiosResponse<ApiResponse<T>> = await axios.get(apiUrl, { headers });
+    console.log(response.data)
     return response.data;
   } catch (error:any) {
     console.error('Error fetching data:', error);

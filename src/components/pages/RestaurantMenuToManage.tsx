@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Tag, Input } from 'antd';
 import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { fetchData, ApiResponse } from '../../api/Api'; 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { add_selected_restaurant } from '../../redux/Actions';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +17,7 @@ interface Restaurant {
 
 const RestaurantMenuToManage: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
   const [data, setData] = useState<Restaurant[]>([]);
   const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
@@ -43,6 +45,14 @@ const RestaurantMenuToManage: React.FC = () => {
   const handleEdit = (record: Restaurant) => {
     setEditModalVisible(true);
     setSelectedRecord(record);
+  };
+
+  const handleEditMenu = (record: Restaurant) => {
+    // Dispatch the selected restaurant to Redux store
+    dispatch(add_selected_restaurant(record));
+  
+    // Navigate to the edit menu page
+    navigate(`/restaurants/${record.id}`);
   };
 
   const handleEditModalCancel = () => {
@@ -106,11 +116,11 @@ const RestaurantMenuToManage: React.FC = () => {
       key: 'edit',
       render: (record: Restaurant) => (
         <Button
-          type="text"
-          style={{ color: 'green' }}
-          icon={<EditOutlined />}
-          onClick={() => navigate(`/restaurants/${record.id}`)}
-        />
+        type="text"
+        style={{ color: 'green' }}
+        icon={<EditOutlined />}
+        onClick={() => handleEditMenu(record)}
+      />
       ),
     },
   ];

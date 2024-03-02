@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Input, Select, Popconfirm, Tag } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { ColumnProps } from 'antd/lib/table';
 import { EditOutlined, EyeOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-
-
+import { fetchData, ApiResponse } from '../../api/Api';
+import { useSelector } from 'react-redux';
+import { MAIN_URL } from '../../redux/ActionTypes';
 interface MenuItem {
   id: number;
   menuName: string;
@@ -15,19 +16,36 @@ interface MenuItem {
   status: string;
 }
 
-interface MenuTableProps {
-  data: MenuItem[];
-}
 
-const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
-    const uniqueCategories = [...new Set(data.map((item) => item.category))];
-    const uniqueRestaurantIds = [...new Set(data.map((item) => item.restaurantId))];
+const MenuTable: React.FC = () => {
+    const [data, setData] = useState<MenuItem[]>([]);
     const [filteredData, setFilteredData] = useState<MenuItem[]>(data);
     const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
     const [selectedRecord, setSelectedRecord] = useState<MenuItem | null>(null);
     const [previewModalVisible, setPreviewModalVisible] = useState<boolean>(false);
     const [selectedPreviewRecord, setSelectedPreviewRecord] = useState<MenuItem | null>(null);
-    const [selectedRestaurantId, setSelectedRestaurantId] = useState<number | null>(null);
+    const token = useSelector((state:any) => state.userInformation.userprofile.token)
+    const selectedRestaurantID = useSelector((state:any) => state.selectedRestaurant.id)
+
+    useEffect(() => {
+      // Fetch menu items from the API when the component mounts
+      const fetchMenuItems = async () => {
+        try {
+          const apiUrl = MAIN_URL + `/menu/restaurants/${selectedRestaurantID}/menu-items`; // Update with your API endpoint
+  
+          const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
+          
+        if (result !== null) {
+          setData(result);
+          setFilteredData(result);
+        }
+        } catch (error) {
+          console.error('Error fetching menu items:', error);
+        }
+      };
+  
+      fetchMenuItems();
+    }, []);
 
   const showPreviewModal = (record: MenuItem) => {
     setPreviewModalVisible(true);
@@ -71,7 +89,6 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
   };
 
   const handleRestaurantSelectChange = (value: number | null) => {
-    setSelectedRestaurantId(value);
     if (value !== null) {
       const filteredItems = data.filter((item) => item.restaurantId === value);
       setFilteredData(filteredItems);
@@ -128,17 +145,16 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
     },
     {
       title: 'Menu Name',
-      dataIndex: 'menuName',
-      key: 'menuName',
+      dataIndex: 'name',
+      key: 'name',
       sorter: (a: MenuItem, b: MenuItem) => a.menuName.localeCompare(b.menuName),
       ...getColumnSearchProps('menuName'),
     },
     {
       title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
+      dataIndex: 'menu_name',
+      key: 'menu_name',
       sorter: (a: MenuItem, b: MenuItem) => a.category.localeCompare(b.category),
-      filters: uniqueCategories.map((category) => ({ text: category, value: category })),
       onFilter: (value: string, record: MenuItem) => record.category === value,
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
         <div style={{ padding: 8 }}>
@@ -150,11 +166,6 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
             onSearch={(value) => setSelectedKeys(value ? [value] : [])}
             filterOption={(input, option: any) => option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
           >
-            {uniqueCategories.map((category) => (
-              <Select.Option key={category} value={category}>
-                {category}
-              </Select.Option>
-            ))}
           </Select>
           <div style={{ marginTop: 8 }}>
             <Button
@@ -174,9 +185,9 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
       ),
     },
     {
-      title: 'Restaurant ID',
-      dataIndex: 'restaurantId',
-      key: 'restaurantId',
+      title: 'Restaurant',
+      dataIndex: 'restaurant_name',
+      key: 'restaurant_name',
       render: (restaurantId : number) => (
         <Tag color="purple">{restaurantId}</Tag>
       ),
@@ -185,27 +196,27 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
     },
     {
       title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => (
-        <Tag color={status === 'active' ? 'green' : 'red'} className='w-20 flex items-center justify-center'>
-          {status === 'active' ? (
+      dataIndex: 'is_active',
+      key: 'is_active',
+      render: (isActive: boolean) => (
+        <Tag color={isActive ? 'green' : 'red'}>
+          {isActive ? (
             <>
               <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} />
-              {status}
+              Active
             </>
           ) : (
             <>
               <CloseCircleOutlined style={{ color: 'red', marginRight: '5px' }} />
-              {status}
+              Inactive
             </>
           )}
         </Tag>
       ),
       sorter: (a: MenuItem, b: MenuItem) => a.status.localeCompare(b.status),
       filters: [
-        { text: 'Active', value: 'active' },
-        { text: 'Inactive', value: 'inactive' },
+        { text: 'Active', value: 'true' },
+        { text: 'Inactive', value: 'false' },
       ],
       onFilter: (value: string, record: MenuItem) => record.status === value,
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
@@ -217,10 +228,10 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
             onSearch={(value) => setSelectedKeys(value ? [value] : [])}
             filterOption={(input, option: any) => option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
           >
-            <Select.Option key="active" value="active">
+            <Select.Option key="active" value="true">
               Active
             </Select.Option>
-            <Select.Option key="inactive" value="inactive">
+            <Select.Option key="inactive" value="false">
               Inactive
             </Select.Option>
           </Select>
@@ -298,19 +309,6 @@ const MenuTable: React.FC<MenuTableProps> = ({ data }) => {
 
   return (
     <div>
-        <Select
-        placeholder="Select Restaurant ID"
-        style={{ width: 200, marginBottom: 16 }}
-        onChange={handleRestaurantSelectChange}
-        value={selectedRestaurantId}
-      >
-        {uniqueRestaurantIds.map((id) => (
-          <Select.Option key={id} value={id}>
-            {id}
-          </Select.Option>
-        ))}
-      </Select>
-
       <Table
         dataSource={filteredData}
         columns={columns as ColumnProps<MenuItem>[]}
