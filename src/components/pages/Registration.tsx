@@ -51,6 +51,22 @@ const Registration: React.FC<RegistrationProps> = () => {
         {/* User Section */}
         <h2 className="text-lg font-bold mb-4" style={{color:"#800020"}}>User Form</h2>
         <Form.Item
+          label="First Name"
+          name="first_name"
+          rules={[{ required: true, message: 'Please input your first name!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Last Name"
+          name="last_name"
+          rules={[{ required: true, message: 'Please input your last name!' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
           label="Username"
           name="username"
           rules={[{ required: true, message: 'Please input your username!' }]}

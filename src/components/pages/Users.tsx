@@ -20,9 +20,13 @@ interface User {
   username: string;
   email: string;
   mobile: string;
+  restaurant_id: number;
   restaurant_name: string;
   is_staff: boolean;
   is_superuser: boolean;
+  is_active: boolean;  // Added is_active field
+  first_name: string;
+  last_name: string;
 }
 // interface UsersTableProps {
 //   data: User[];
@@ -108,6 +112,18 @@ const Users: React.FC = () => {
       sorter: (a: User, b: User) => a.id - b.id,
     },
     {
+      title: 'First Name',
+      dataIndex: 'first_name',
+      key: 'first_name',
+      ...getColumnSearchProps('first_name'),
+    },
+    {
+      title: 'Last Name',
+      dataIndex: 'last_name',
+      key: 'last_name',
+      ...getColumnSearchProps('last_name'),
+    },
+    {
       title: 'Username',
       dataIndex: 'username',
       key: 'username',
@@ -138,12 +154,12 @@ const Users: React.FC = () => {
     },
     {
       title: 'Status',
-      dataIndex: 'status',
+      dataIndex: 'is_active',
       key: 'status',
-      render: () => (
-        <Tag color='green' className='flex items-center justify-center'>
-          <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} />
-          Active
+      render: (is_active: boolean) => (
+        <Tag color={is_active ? 'green' : 'red'} className='flex items-center justify-center'>
+          {is_active ? <CheckCircleOutlined style={{ color: 'green', marginRight: '5px' }} /> : <CloseCircleOutlined style={{ color: 'red', marginRight: '5px' }} />}
+          {is_active ? 'Active' : 'Inactive'}
         </Tag>
       ),
     },

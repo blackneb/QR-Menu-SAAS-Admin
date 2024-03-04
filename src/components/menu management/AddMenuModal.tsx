@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Form, InputNumber, Input, Select, Button, notification } from 'antd';
-import { fetchData, ApiResponse, createData } from '../../api/Api';
+import { Form, InputNumber, Input, Select, Button, notification, Upload } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
+import { fetchData, createData } from '../../api/Api';
 import { useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 
 const { Option } = Select;
+const { Dragger } = Upload;
 
 const AddMenuModal: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const token = useSelector((state:any) => state.userInformation.userprofile.token);
   const selectedRestaurantID = useSelector((state:any) => state.selectedRestaurant.id)
 
@@ -30,7 +34,8 @@ const AddMenuModal: React.FC = () => {
   }, []);
 
   const onFinish = async (values: any) => {
-    const apiJson = {
+    // Form data for menu item
+    const menuItemData = {
       menu: values.category,
       name: values.menuName,
       description: values.description,
@@ -39,28 +44,49 @@ const AddMenuModal: React.FC = () => {
 
     try {
       setLoading(true);
-      const apiUrl = MAIN_URL + '/menu/menu-items/';
-      const result: ApiResponse<any> | null = await createData<any>(apiUrl, apiJson, token);
 
-      if (result !== null) {
-        console.log('Menu creation successful!', result);
+      // API call to create menu item
+      const menuItemApiUrl = MAIN_URL + '/menu/menu-items/';
+      const menuItemResult: any | null = await createData<any>(menuItemApiUrl, menuItemData, token);
+
+      if (menuItemResult !== null) {
+        console.log('Menu item creation successful!', menuItemResult);
         notification.success({
           message: 'Registration Successful',
-          description: 'Menu Item has been registered successfully!',
+          description: 'Menu item has been registered successfully!',
         });
+        console.log(menuItemResult)
         // Add any further actions upon successful creation, e.g., redirect or notify the user
+
+        // Now handle the menu item images
+        const menuItemImageData = new FormData();
+        menuItemImageData.append('menu_item', menuItemResult.id); // Use the menu item ID obtained from the response
+
+        // Add your image file to the FormData
+        menuItemImageData.append('image_url', values.image[0].originFileObj); // Assuming 'image' is the name of your file upload field
+
+        const menuItemImageApiUrl = MAIN_URL + '/menu/menu-item-images/';
+        await createData<any>(menuItemImageApiUrl, menuItemImageData, token);
+
       } else {
-        // Handle the case where the menu creation fails
-        console.error('Menu creation failed:', result);
+        // Handle the case where the menu item creation fails
+        console.error('Menu item creation failed:', menuItemResult);
       }
     } catch (error: any) {
-      console.error('Error creating menu:', error);
+      console.error('Error creating menu item:', error);
       notification.success({
         message: 'Registration Failed',
       });
     } finally {
       setLoading(false);
     }
+  };
+
+  // Dummy method for image upload (replace with actual implementation)
+  const dummyRequest = ({ file, onSuccess }: any) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
   };
 
   return (
@@ -74,6 +100,7 @@ const AddMenuModal: React.FC = () => {
             labelAlign="left"
             labelWrap
           >
+            {/* Category dropdown */}
             <Form.Item
               label="Category"
               name="category"
@@ -87,6 +114,8 @@ const AddMenuModal: React.FC = () => {
                 ))}
               </Select>
             </Form.Item>
+
+            {/* Menu Name input */}
             <Form.Item
               label="Menu Name"
               name="menuName"
@@ -94,6 +123,8 @@ const AddMenuModal: React.FC = () => {
             >
               <Input min={0} step={0.01} />
             </Form.Item>
+
+            {/* Price input */}
             <Form.Item
               label="Price"
               name="price"
@@ -101,6 +132,8 @@ const AddMenuModal: React.FC = () => {
             >
               <InputNumber min={0} step={0.01} />
             </Form.Item>
+
+            {/* Description input */}
             <Form.Item
               label="Description"
               name="description"
@@ -108,6 +141,33 @@ const AddMenuModal: React.FC = () => {
             >
               <Input.TextArea />
             </Form.Item>
+
+            {/* Image upload section */}
+            <Form.Item
+              label="Menu Item Image"
+              name="image"
+              valuePropName="fileList"
+              getValueFromEvent={(e) => {
+                const fileList = e.fileList.slice(-1); // Keep only the last file in the list
+                setSelectedFile(fileList[0]?.originFileObj || null); // Set the selected file in state
+                return fileList;
+              }}
+              rules={[{ required: true, message: 'Please upload an image for the menu item' }]}
+            >
+              <Dragger
+                customRequest={dummyRequest}
+                accept=".jpg, .jpeg, .png"
+                showUploadList={false}
+              >
+                <p className="ant-upload-drag-icon">
+                  <UploadOutlined style={{ fontSize: '24px' }} />
+                </p>
+                {selectedFile && (
+                  <p className="ant-upload-hint">Selected file: {selectedFile.name}</p>
+                )}
+              </Dragger>
+            </Form.Item>
+            {/* Submit button */}
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Button
                 type="primary"
