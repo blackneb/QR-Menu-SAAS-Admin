@@ -100,8 +100,18 @@ const Users: React.FC = () => {
   };
 
   const handleAction = (action: string, record: User) => {
-    // Implement the logic based on the selected action (activate or deactivate)
-    console.log(`Performing "${action}" action on user with ID ${record.id}`);
+    handleActivateDeactivate(action, record.id);
+  };
+  const handleActivateDeactivate = async (action: string, userId: number) => {
+    try {
+      const apiUrl = MAIN_URL + `users/activate-deactivate/${userId}/`;
+      const result: AxiosResponse<any> = await axios.put(apiUrl, { action }, { headers: { Authorization: `Bearer ${token}` } });
+  
+      // Handle the result as needed, e.g., update the state or show a notification
+      console.log(result.data);
+    } catch (error) {
+      console.error('Error activating/deactivating user:', error);
+    }
   };
 
   const columns = [
