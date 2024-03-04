@@ -115,12 +115,6 @@ const Restaurants: React.FC = () => {
         </Tag>
       ),
     },
-    {
-      title: 'Managed By',
-      dataIndex: 'managedBy',
-      key: 'managedBy',
-      ...getColumnSearchProps('managedBy'),
-    },
     // {
     //   title: 'Status',
     //   dataIndex: 'status',
@@ -137,13 +131,6 @@ const Restaurants: React.FC = () => {
     //   ),
     //   sorter: (a: Restaurant, b: Restaurant) => a.status.localeCompare(b.status),
     // },
-    
-    {
-      title: 'Registration Date',
-      dataIndex: 'registrationDate',
-      key: 'registrationDate',
-      sorter: (a: Restaurant, b: Restaurant) => a.registrationDate.localeCompare(b.registrationDate),
-    },
     {
       title: 'Edit',
       key: 'edit',
@@ -191,23 +178,9 @@ const Restaurants: React.FC = () => {
           rowKey={(record) => record.id.toString()}
         />
       )}
-      <Modal
-        title="Edit Restaurant"
-        visible={editModalVisible}
-        onCancel={handleEditModalCancel}
-        footer={[
-          <Button key="cancel" onClick={handleEditModalCancel}>
-            Cancel
-          </Button>,
-          <Button key="save" type="primary" style={{ background: '#800020', borderColor: '#800020' }}>
-            Save
-          </Button>,
-        ]}
-      >
         {selectedRecord && (
           <EditRestaurant record={selectedRecord} onCancel={handleEditModalCancel} />
         )}
-      </Modal>
     </div>
   );
 };

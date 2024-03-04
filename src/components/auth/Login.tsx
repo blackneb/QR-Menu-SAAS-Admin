@@ -38,6 +38,7 @@ const Login: React.FC = () => {
   
           // Dispatch user information to Redux store
           dispatch(add_user_information(userInformation));
+          navigate("/users")
       } catch (error) {
         console.log(error);
       }

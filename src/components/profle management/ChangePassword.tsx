@@ -1,22 +1,40 @@
 import React, {useState} from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, notification, message } from 'antd';
+import { MAIN_URL } from '../../redux/ActionTypes';
+import { updateData } from '../../api/Api';
+import { useSelector } from 'react-redux';
+
 
 const ChangePassword: React.FC = () => {
     const [loading, setLoading] = useState(false);
+    const token = useSelector((state:any) => state.userInformation.userprofile.token)
     const onFinish = async (values: any) => {
-        console.log(values)
-        try {
-          setLoading(true);
-          // Add your account creation logic here, e.g., make an API request
-          // Simulate a delay for demonstration purposes (remove in a real application)
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          console.log('Account creation successful!');
-        } catch (error: any) {
-          console.error('Account creation failed:', error.message);
-        } finally {
-          setLoading(false);
+      try {
+        setLoading(true);
+    
+        const apiUrl = MAIN_URL + '/users/change-password/';
+    
+        const result: any | null = await updateData<any>(apiUrl, values, token);
+    
+        if (result !== null) {
+          // Handle the result as needed, e.g., show a success message
+          console.log(result);
+          notification.success({
+            message: 'Password Change',
+            description: 'Password has been Changed successfully!',
+          });
+          // Reset the form or perform any other actions upon successful password change
+        } else {
+          // Handle the case where the password change fails
+          console.error('Password change failed:', result);
         }
-      };
+      } catch (error:any) {
+        console.error('Password change failed:', error.message);
+        // Handle errors, e.g., show an error message to the user
+      } finally {
+        setLoading(false);
+      }
+    };
   return (
     <section className="flex flex-col mt-8 md:flex-row justify-center items-center">
       <div className="bg-white shadow-md px-8 flex items-center rounded-2xl justify-center w-full md:w-1/2 lg:w-1/3">

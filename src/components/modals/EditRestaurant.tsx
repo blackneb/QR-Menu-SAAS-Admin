@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Button, Select } from 'antd';
-
+import { Modal, Form, Input, Button, notification } from 'antd';
+import { updateData } from '../../api/Api';
+import { MAIN_URL } from '../../redux/ActionTypes';
+import { useSelector } from 'react-redux';
 
 const EditRestaurant: React.FC<any> = ({ record, onCancel }) => {
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
+  const token = useSelector((state: any) => state.userInformation.userprofile.token);
 
   useEffect(() => {
     // Set the form values when the record changes
@@ -15,20 +18,47 @@ const EditRestaurant: React.FC<any> = ({ record, onCancel }) => {
     try {
       setSaving(true);
       const values = await form.validateFields();
-      console.log('Form values:', values);
-      // Implement your save/update logic here
+      const apiUrl = `${MAIN_URL}restorant/update-restaurant-details/${values.id}/`; // Adjust the endpoint accordingly
+      const response: any | null = await updateData(apiUrl, values, token);
 
-      // Close the modal
-      onCancel();
+      if (response !== null) {
+        console.log('Restaurant details updated successfully:', response);
+
+        // Display success notification
+        notification.success({
+          message: 'Update Successful',
+          description: 'Restaurant details have been successfully updated.',
+        });
+
+        onCancel(); // Close the modal
+      }
     } catch (error) {
       console.error('Error saving data:', error);
+
+      // Display error notification
+      notification.error({
+        message: 'Update Failed',
+        description: 'Failed to update restaurant details. Please try again.',
+      });
     } finally {
       setSaving(false);
     }
   };
 
   return (
-
+    <Modal
+      title="Edit Restaurant"
+      visible={true} // Ensure the visibility is managed by the parent component
+      onCancel={onCancel}
+      footer={[
+        <Button key="cancel" onClick={onCancel}>
+          Cancel
+        </Button>,
+        <Button key="save" type="primary" onClick={handleSave} loading={saving} style={{ background: '#800020', borderColor: '#800020' }}>
+          Save
+        </Button>,
+      ]}
+    >
       <Form form={form} layout="vertical">
         <Form.Item name="id" label="ID">
           <Input disabled />
@@ -42,19 +72,11 @@ const EditRestaurant: React.FC<any> = ({ record, onCancel }) => {
         <Form.Item name="contact_info" label="Contact Info">
           <Input />
         </Form.Item>
-        <Form.Item name="managedBy" label="Managed By">
-          <Input disabled/>
-        </Form.Item>
-        <Form.Item name="status" label="Status">
-          <Select disabled>
-            <Select.Option value="active">Active</Select.Option>
-            <Select.Option value="inactive">Inactive</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="registrationDate" label="Registration Date">
-          <Input disabled/>
+        <Form.Item name="url" label="URL" rules={[{ required: true, message: 'Please enter the URL' }]}>
+          <Input />
         </Form.Item>
       </Form>
+    </Modal>
   );
 };
 
