@@ -11,7 +11,7 @@ interface Category {
   is_active: boolean;
 }
 
-const EditCategoryModal: React.FC<any> = ({ category, onOk }) => {
+const EditCategoryModal: React.FC<any> = ({ category, onOk,fetchCategories }) => {
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
@@ -25,6 +25,7 @@ const EditCategoryModal: React.FC<any> = ({ category, onOk }) => {
 
       if (response !== null) {
         console.log('Category updated successfully:', response);
+        fetchCategories()
         notification.success({
           message:"Updated Successfully",
           description:"Menu Item Updated Successfully"

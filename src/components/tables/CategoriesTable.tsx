@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Table, Tag, Spin, Button, Popconfirm,Modal } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { fetchData, ApiResponse } from '../../api/Api';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import EditCategoryModal from '../modals/EditCategoryModal';
+import { add_categories } from '../../redux/Actions';
 
 
 interface MenuItem {
@@ -19,29 +20,29 @@ interface MenuItem {
 
 const CategoryTable: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<MenuItem[]>([]);
+  const dispatch = useDispatch();
+  const data = useSelector((state:any) => state.categories)
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<MenuItem | null>(null);
 
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
   const selectedRestaurantID = useSelector((state: any) => state.selectedRestaurant.id);
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setLoading(true);
-        const apiUrl = MAIN_URL +  `menu/restaurants/${selectedRestaurantID}/menus/`;
-        const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const apiUrl = MAIN_URL +  `menu/restaurants/${selectedRestaurantID}/menus/`;
+      const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
 
-        if (result !== null) {
-          setData(result);
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        setLoading(false);
+      if (result !== null) {
+        dispatch(add_categories(result))
       }
-    };
-
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchCategories();
   }, []);
 
@@ -142,6 +143,7 @@ const CategoryTable: React.FC = () => {
           visible={editModalVisible}
           onCancel={handleEditModalCancel}
           onOk={handleEditModalOk}
+          fetchCategories={fetchCategories}
         />
       </Modal>
       

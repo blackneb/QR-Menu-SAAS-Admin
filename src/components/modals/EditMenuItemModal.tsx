@@ -4,7 +4,7 @@ import { updateData } from '../../api/Api';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { useSelector } from 'react-redux';
 
-const EditMenuItemModal: React.FC<any> = ({ menuItem, visible, onCancel, onOk }) => {
+const EditMenuItemModal: React.FC<any> = ({ menuItem, visible, onCancel, onOk, fetchMenuItems }) => {
   const [form] = Form.useForm();
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
   const [saving, setSaving] = useState(false);
@@ -16,6 +16,7 @@ const EditMenuItemModal: React.FC<any> = ({ menuItem, visible, onCancel, onOk })
 
       if (response !== null) {
         console.log('Menu item updated successfully:', response);
+        fetchMenuItems();
         notification.success({
           message:"Updated Successfully",
           description:"Menu Item Updated Successfully"

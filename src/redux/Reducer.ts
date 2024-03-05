@@ -2,10 +2,10 @@ import { ADD_USER_INFORMATION, SELECTED_RESTAURANT, USERS, RESTAURANTS, MENU_LIS
 
 const initialStateUserInformation:any = {}
 const initialStateSelectedestaurant:any = {}
-const initialStateUsers:any = {}
-const initialStateRestaurants:any = {}
-const initialStateMenuList:any = {}
-const initialStateCategories:any = {}
+const initialStateUsers:any = []
+const initialStateRestaurants:any = []
+const initialStateMenuList:any = []
+const initialStateCategories:any = []
 
 export const addUserInformationReducer = ( state = initialStateUserInformation, action:any ) => {
     const { type, payload } = action;
@@ -37,15 +37,15 @@ export const addUsers = ( state = initialStateUsers, action:any ) => {
     }
 }
 
-export const addResturants = ( state = initialStateRestaurants, action:any ) => {
+export const addResturants = (state = initialStateRestaurants, action:any) => {
     const { type, payload } = action;
-    switch(type){
-        case RESTAURANTS:
-            return payload
-        default:
-            return state
+    switch (type) {
+      case RESTAURANTS:
+        return payload;
+      default:
+        return state;
     }
-}
+  };
 
 export const addMenuList = ( state = initialStateMenuList, action:any ) => {
     const { type, payload } = action;

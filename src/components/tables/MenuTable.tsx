@@ -4,10 +4,11 @@ import { SearchOutlined } from '@ant-design/icons';
 import { ColumnProps } from 'antd/lib/table';
 import { EditOutlined, EyeOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { fetchData, ApiResponse } from '../../api/Api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import ViewMenuItemModal from '../modals/ViewMenuItemModal';
 import EditMenuItemModal from '../modals/EditMenuItemModal';
+import { add_menu_list } from '../../redux/Actions';
 
 interface MenuItem {
   id: number;
@@ -21,7 +22,8 @@ interface MenuItem {
 
 const MenuTable: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<MenuItem[]>([]);
+  const dispatch = useDispatch()
+  const data = useSelector((state:any) => state.menuList)
   const [filteredData, setFilteredData] = useState<MenuItem[]>(data);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<MenuItem | null>(null);
@@ -31,26 +33,26 @@ const MenuTable: React.FC = () => {
 
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
   const selectedRestaurantID = useSelector((state: any) => state.selectedRestaurant.id);
+  const fetchMenuItems = async () => {
+    try {
+      setLoading(true);
+      const apiUrl = MAIN_URL + `menu/restaurants/${selectedRestaurantID}/menu-items`; // Update with your API endpoint
+
+      const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
+      
+    if (result !== null) {
+      dispatch(add_menu_list(result))
+      setFilteredData(result);
+    }
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     useEffect(() => {
       // Fetch menu items from the API when the component mounts
-      const fetchMenuItems = async () => {
-        try {
-          setLoading(true);
-          const apiUrl = MAIN_URL + `menu/restaurants/${selectedRestaurantID}/menu-items`; // Update with your API endpoint
-  
-          const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
-          
-        if (result !== null) {
-          setData(result);
-          setFilteredData(result);
-        }
-        } catch (error) {
-          console.error('Error fetching menu items:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
   
       fetchMenuItems();
     }, []);
@@ -106,7 +108,7 @@ const MenuTable: React.FC = () => {
 
   const handleRestaurantSelectChange = (value: number | null) => {
     if (value !== null) {
-      const filteredItems = data.filter((item) => item.restaurantId === value);
+      const filteredItems = data.filter((item:any) => item.restaurantId === value);
       setFilteredData(filteredItems);
     } else {
       setFilteredData(data);
@@ -347,6 +349,7 @@ const MenuTable: React.FC = () => {
       >
         <EditMenuItemModal
           menuItem={selectedRecord}
+          fetchMenuItems={fetchMenuItems}
         />
       </Modal>
 

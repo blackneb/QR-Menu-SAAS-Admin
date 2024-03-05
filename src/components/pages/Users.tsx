@@ -14,6 +14,8 @@ import { MAIN_URL } from '../../redux/ActionTypes';
 import { useSelector } from 'react-redux';
 import EditUser from '../modals/EditUser';
 import ViewUser from '../modals/ViewUser';
+import { useDispatch } from 'react-redux';
+import { add_users } from '../../redux/Actions';
 
 interface User {
   id: number;
@@ -34,7 +36,8 @@ interface User {
 
 const Users: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<User[]>([]);
+  const dispatch = useDispatch();
+  const [data, setData] = useSelector((state:any) => state.users)
   const [filteredData, setFilteredData] = useState<User[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);
@@ -42,23 +45,24 @@ const Users: React.FC = () => {
   const [selectedRecord, setSelectedRecord] = useState<User | null>(null);
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const apiUrl = MAIN_URL + 'users/restaurantadmins/';
-        const result: any | null = await fetchData<User[]>(apiUrl, token);
+  const fetchUserData = async () => {
+    try {
+      const apiUrl = MAIN_URL + 'users/restaurantadmins/';
+      const result: any | null = await fetchData<User[]>(apiUrl, token);
 
-        if (result !== null) {
-          setData(result);
-          setFilteredData(result);
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+      if (result !== null) {
+        dispatch(add_users(result))
+        setFilteredData(result);
       }
-      finally {
-        setLoading(false);
-      }
-    };
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
 
     fetchUserData();
   }, []);
@@ -111,6 +115,7 @@ const Users: React.FC = () => {
       console.log(result);
       if (result.status === 200) {
         // Show a success notification
+        fetchUserData()
         notification.success({
           message: 'User Status Updated',
           description: `User status has been successfully ${action === 'activate' ? 'activated' : 'deactivated'}.`,

@@ -4,7 +4,7 @@ import { updateData } from '../../api/Api';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { useSelector } from 'react-redux';
 
-const EditRestaurant: React.FC<any> = ({ record, onCancel }) => {
+const EditRestaurant: React.FC<any> = ({ record, onCancel, fetchRestaurantData }) => {
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
@@ -23,7 +23,7 @@ const EditRestaurant: React.FC<any> = ({ record, onCancel }) => {
 
       if (response !== null) {
         console.log('Restaurant details updated successfully:', response);
-
+        fetchRestaurantData();
         // Display success notification
         notification.success({
           message: 'Update Successful',

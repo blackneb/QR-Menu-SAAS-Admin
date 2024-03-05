@@ -10,9 +10,27 @@ const tabStyle = { color: '#800020' };
 
 const MenuManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState('1');
+  const [menuListKey, setMenuListKey] = useState(1);
+  const [addMenuKey, setAddMenuKey] = useState(1);
+  const [addCategoriesKey, setAddCategoriesKey] = useState(1);
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
+
+    // Increment the key to force remount and refresh
+    switch (key) {
+      case '1':
+        setMenuListKey((prevKey) => prevKey + 1);
+        break;
+      case '2':
+        setAddMenuKey((prevKey) => prevKey + 1);
+        break;
+      case '3':
+        setAddCategoriesKey((prevKey) => prevKey + 1);
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -20,17 +38,17 @@ const MenuManagement: React.FC = () => {
       <Tabs activeKey={activeTab} onChange={handleTabChange} style={tabStyle}>
         <TabPane tab={<div style={tabStyle}>Menu List</div>} key="1">
           <div style={{ height: '80vh', overflowY: 'auto' }}>
-            <MenuList />
+            <MenuList key={menuListKey} />
           </div>
         </TabPane>
         <TabPane tab={<div style={tabStyle}>Add Menu</div>} key="2">
           <div style={{ height: '80vh', overflowY: 'auto' }}>
-            <AddMenuModal />
+            <AddMenuModal key={addMenuKey} />
           </div>
         </TabPane>
         <TabPane tab={<div style={tabStyle}>Add Categories</div>} key="3">
           <div style={{ height: '80vh', overflowY: 'auto' }}>
-            <AddCategories />
+            <AddCategories key={addCategoriesKey} />
           </div>
         </TabPane>
       </Tabs>

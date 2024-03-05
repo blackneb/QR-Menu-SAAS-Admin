@@ -3,18 +3,36 @@ import { Form, InputNumber, Input, Select, Button, notification, Upload } from '
 import { InboxOutlined } from '@ant-design/icons';
 import { UploadOutlined } from '@ant-design/icons';
 import { fetchData, createData } from '../../api/Api';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
+import { add_menu_list } from '../../redux/Actions';
 
 const { Option } = Select;
 const { Dragger } = Upload;
 
 const AddMenuModal: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch()
   const [categoryList, setCategoryList] = useState([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const token = useSelector((state:any) => state.userInformation.userprofile.token);
   const selectedRestaurantID = useSelector((state:any) => state.selectedRestaurant.id)
+
+  const fetchMenuItems = async () => {
+    try {
+      setLoading(true);
+      const apiUrl = MAIN_URL + `menu/restaurants/${selectedRestaurantID}/menu-items`;
+      const result: any | null = await fetchData<any>(apiUrl, token);
+      
+    if (result !== null) {
+      dispatch(add_menu_list(result))
+    }
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -50,6 +68,7 @@ const AddMenuModal: React.FC = () => {
       const menuItemResult: any | null = await createData<any>(menuItemApiUrl, menuItemData, token);
 
       if (menuItemResult !== null) {
+        fetchMenuItems()
         console.log('Menu item creation successful!', menuItemResult);
         notification.success({
           message: 'Registration Successful',

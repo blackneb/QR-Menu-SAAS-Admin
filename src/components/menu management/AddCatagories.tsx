@@ -1,14 +1,32 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox, notification } from 'antd';
 import CategoryTable from '../tables/CategoriesTable';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createData, ApiResponse } from '../../api/Api';
 import { MAIN_URL } from '../../redux/ActionTypes';
+import { fetchData } from '../../api/Api';
+import { add_categories } from '../../redux/Actions';
 
 const AddCategories: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch()
   const selectedRestaurantID = useSelector((state: any) => state.selectedRestaurant.id);
   const token = useSelector((state:any) => state.userInformation.userprofile.token)
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const apiUrl = MAIN_URL +  `menu/restaurants/${selectedRestaurantID}/menus/`;
+      const result: any | null = await fetchData<any[]>(apiUrl, token);
+
+      if (result !== null) {
+        dispatch(add_categories(result))
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const onFinish = async (values: any) => {
     const apiJson = {
       title: values.categoryName,
@@ -25,6 +43,7 @@ const AddCategories: React.FC = () => {
 
       if (result !== null) {
         console.log('Category creation successful!');
+        fetchCategories()
         notification.success({
           message: 'Registration Successful',
           description: 'Category has been registered successfully!',

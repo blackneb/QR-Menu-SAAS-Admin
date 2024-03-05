@@ -5,6 +5,9 @@ import { fetchData, ApiResponse } from '../../api/Api';
 import { useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import EditRestaurant from '../modals/EditRestaurant';
+import { useDispatch } from 'react-redux';
+import { add_restaurants } from '../../redux/Actions';
+
 
 interface Restaurant {
   id: number;
@@ -18,12 +21,29 @@ interface Restaurant {
 
 const Restaurants: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<any[]>([]);
+  const dispatch = useDispatch()
+  const data = useSelector((state: any) => state.restaurants);
   const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<Restaurant | null>(null);
   const [searchInput, setSearchInput] = useState<string>(''); // Add selectedKeys state
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const fetchRestaurantData = async () => {
+    const apiUrl = MAIN_URL + 'restorant/add-restorant/';
+
+    try {
+      const result: any | null = await fetchData<Restaurant[]>(apiUrl, token);
+      
+      if (result !== null) {
+        dispatch(add_restaurants(result));
+        setFilteredData(result);
+      }
+    } catch (error) {
+      console.error("Error fetching restaurant data:", error);
+    }finally {
+      setLoading(false);
+    }
+  };
   const handleEdit = (record: Restaurant) => {
     setEditModalVisible(true);
     setSelectedRecord(record);
@@ -146,22 +166,6 @@ const Restaurants: React.FC = () => {
   ];
 
   useEffect(() => {
-    const fetchRestaurantData = async () => {
-      const apiUrl = MAIN_URL + 'restorant/add-restorant/';
-  
-      try {
-        const result: any | null = await fetchData<Restaurant[]>(apiUrl, token);
-        
-        if (result !== null) {
-          setData(result);
-        }
-      } catch (error) {
-        // Handle error, e.g., log or show a notification
-        console.error("Error fetching restaurant data:", error);
-      }finally {
-        setLoading(false);
-      }
-    };
   
     fetchRestaurantData();
   }, [token]);
@@ -179,7 +183,7 @@ const Restaurants: React.FC = () => {
         />
       )}
         {selectedRecord && (
-          <EditRestaurant record={selectedRecord} onCancel={handleEditModalCancel} />
+          <EditRestaurant record={selectedRecord} onCancel={handleEditModalCancel} fetchRestaurantData={fetchRestaurantData} />
         )}
     </div>
   );
