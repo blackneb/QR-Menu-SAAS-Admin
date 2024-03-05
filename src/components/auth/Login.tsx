@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Card } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -12,16 +12,23 @@ const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    const storedSession = localStorage.getItem('userSession');
+    if (storedSession) {
+      const userInformation = JSON.parse(storedSession);
+      dispatch(add_user_information(userInformation));
+      navigate("/users");
+    }
+  }, [dispatch, navigate]);
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-      const apiUrl =  MAIN_URL + 'users/login';
+      const apiUrl = MAIN_URL + 'users/login';
       const profileApiUrl = MAIN_URL + 'users/profile';
       const apiDataSend = {
         email: values.username,
-        password: values.password
-      }
+        password: values.password,
+      };
       const response = await axios.post(apiUrl, apiDataSend);
       try {
         const res = await axios.get(profileApiUrl, {
@@ -30,20 +37,25 @@ const Login: React.FC = () => {
             'Content-Type': 'application/json',
           },
         });
+
         const userInformation = {
           userLogged: true,
           userprofile: response.data,
-          profile:res.data
+          profile: res.data,
         };
-  
-          // Dispatch user information to Redux store
-          dispatch(add_user_information(userInformation));
-          navigate("/users")
+
+        localStorage.setItem('userSession', JSON.stringify(userInformation));
+        setTimeout(() => {
+          localStorage.removeItem('userSession');
+        }, 2 * 60 * 60 * 1000); 
+
+        dispatch(add_user_information(userInformation));
+        navigate("/users");
       } catch (error) {
         console.log(error);
       }
       setLoading(false);
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error);
       notification.warning({
         message: error.response.data.Message[0],
@@ -53,11 +65,10 @@ const Login: React.FC = () => {
         },
       });
       setLoading(false);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center h-screen w-full" style={{ height: "80vh" }}>
