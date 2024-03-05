@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Tag, Dropdown, Menu, Input,Spin } from 'antd';
+import { Table, Button, Modal, Tag, Dropdown, Menu, Input,Spin, notification } from 'antd';
 import {
   SearchOutlined,
   EditOutlined,
@@ -105,10 +105,19 @@ const Users: React.FC = () => {
   const handleActivateDeactivate = async (action: string, userId: number) => {
     try {
       const apiUrl = MAIN_URL + `users/activate-deactivate/${userId}/`;
-      const result: AxiosResponse<any> = await axios.put(apiUrl, { action }, { headers: { Authorization: `Bearer ${token}` } });
+      const result: any = await axios.put(apiUrl, { action }, { headers: { Authorization: `Bearer ${token}` } });
   
       // Handle the result as needed, e.g., update the state or show a notification
-      console.log(result.data);
+      console.log(result);
+      if (result.status === 200) {
+        // Show a success notification
+        notification.success({
+          message: 'User Status Updated',
+          description: `User status has been successfully ${action === 'activate' ? 'activated' : 'deactivated'}.`,
+        });
+  
+        // If needed, you can update the state or perform other actions here
+      }
     } catch (error) {
       console.error('Error activating/deactivating user:', error);
     }

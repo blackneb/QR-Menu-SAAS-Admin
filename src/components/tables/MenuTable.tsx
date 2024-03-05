@@ -37,7 +37,7 @@ const MenuTable: React.FC = () => {
       const fetchMenuItems = async () => {
         try {
           setLoading(true);
-          const apiUrl = MAIN_URL + `/menu/restaurants/${selectedRestaurantID}/menu-items`; // Update with your API endpoint
+          const apiUrl = MAIN_URL + `menu/restaurants/${selectedRestaurantID}/menu-items`; // Update with your API endpoint
   
           const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
           
@@ -339,7 +339,11 @@ const MenuTable: React.FC = () => {
         title="Edit Menu Item"
         visible={editMenuItemModalVisible} // Corrected variable name
         onCancel={hideEditMenuItemModal}
-        okButtonProps={{ style: { backgroundColor: '#800020' } }}
+        footer={[
+          <Button key="cancel" onClick={hideEditMenuItemModal}>
+            Cancel
+          </Button>
+        ]}
       >
         <EditMenuItemModal
           menuItem={selectedRecord}

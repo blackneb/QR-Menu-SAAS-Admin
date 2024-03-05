@@ -24,7 +24,6 @@ const fetchData = async <T>(apiUrl: string, token: string): Promise<ApiResponse<
     return response.data;
   } catch (error:any) {
     console.error('Error fetching data:', error);
-    showErrorNotification(`Failed to fetch data. ${error.response?.data.message || 'Please try again.'}`);
     return null;
   }
 };

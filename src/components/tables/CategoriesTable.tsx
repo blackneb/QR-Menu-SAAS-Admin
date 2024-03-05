@@ -29,7 +29,7 @@ const CategoryTable: React.FC = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const apiUrl = MAIN_URL +  `/menu/restaurants/${selectedRestaurantID}/menus/`;
+        const apiUrl = MAIN_URL +  `menu/restaurants/${selectedRestaurantID}/menus/`;
         const result: any | null = await fetchData<MenuItem[]>(apiUrl, token);
 
         if (result !== null) {
@@ -134,10 +134,7 @@ const CategoryTable: React.FC = () => {
         footer={[
           <Button key="cancel" onClick={handleEditModalCancel}>
             Cancel
-          </Button>,
-          <Button key="save" type="primary" style={{ background: '#800020', borderColor: '#800020' }}>
-            Save
-          </Button>,
+          </Button>
         ]}
       >
         <EditCategoryModal

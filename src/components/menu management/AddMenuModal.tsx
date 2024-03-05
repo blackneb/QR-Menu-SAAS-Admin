@@ -19,7 +19,7 @@ const AddMenuModal: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const apiUrl = MAIN_URL + `/menu/restaurants/${selectedRestaurantID}/menus/`;
+        const apiUrl = MAIN_URL + `menu/restaurants/${selectedRestaurantID}/menus/`;
         const result: any | null = await fetchData<any[]>(apiUrl, token);
 
         if (result !== null) {
@@ -46,7 +46,7 @@ const AddMenuModal: React.FC = () => {
       setLoading(true);
 
       // API call to create menu item
-      const menuItemApiUrl = MAIN_URL + '/menu/menu-items/';
+      const menuItemApiUrl = MAIN_URL + 'menu/menu-items/';
       const menuItemResult: any | null = await createData<any>(menuItemApiUrl, menuItemData, token);
 
       if (menuItemResult !== null) {
@@ -65,7 +65,7 @@ const AddMenuModal: React.FC = () => {
         // Add your image file to the FormData
         menuItemImageData.append('image_url', values.image[0].originFileObj); // Assuming 'image' is the name of your file upload field
 
-        const menuItemImageApiUrl = MAIN_URL + '/menu/menu-item-images/';
+        const menuItemImageApiUrl = MAIN_URL + 'menu/menu-item-images/';
         await createData<any>(menuItemImageApiUrl, menuItemImageData, token);
 
       } else {

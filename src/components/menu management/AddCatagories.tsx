@@ -19,7 +19,7 @@ const AddCategories: React.FC = () => {
 
     try {
       setLoading(true);
-      const apiUrl = MAIN_URL + '/menu/menus/'; 
+      const apiUrl = MAIN_URL + 'menu/menus/'; 
 
       const result: ApiResponse<any> | null = await createData(apiUrl, apiJson, token);
 
