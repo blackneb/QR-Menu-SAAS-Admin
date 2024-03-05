@@ -1,3 +1,7 @@
 export const ADD_USER_INFORMATION = "ADD_USER_INFORMATION"
 export const MAIN_URL = "https://qrmenuapi.blackneb.com/"
 export const SELECTED_RESTAURANT = "SELECTED_RESTAURANT"
+export const USERS = "USERS"
+export const RESTAURANTS = "RESTAURANTS"
+export const MENU_LIST = "MENU_LIST"
+export const CATEGORIES = "CATEGORIES"
