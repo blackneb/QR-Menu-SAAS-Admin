@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Tag, Input, Spin } from 'antd';
-import { SearchOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { fetchData, ApiResponse } from '../../api/Api'; 
+import { Table, Button, Tag, Input, Spin } from 'antd';
+import { SearchOutlined, EditOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { fetchData } from '../../api/Api'; 
 import { useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import EditRestaurant from '../modals/EditRestaurant';

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Modal, Descriptions, Button } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
+import { Descriptions } from 'antd';
 
 interface ViewUserProps {
   record: {
@@ -15,7 +14,7 @@ interface ViewUserProps {
   onCancel: () => void;
 }
 
-const ViewUser: React.FC<ViewUserProps> = ({ record, onCancel }) => {
+const ViewUser: React.FC<ViewUserProps> = ({ record }) => {
   return (
     <div>
         {record && (

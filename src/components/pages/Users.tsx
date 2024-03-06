@@ -8,8 +8,8 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from '@ant-design/icons';
-import axios, { AxiosResponse } from 'axios';
-import { fetchData, ApiResponse } from '../../api/Api';
+import axios from 'axios';
+import { fetchData } from '../../api/Api';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { useSelector } from 'react-redux';
 import EditUser from '../modals/EditUser';
@@ -37,7 +37,7 @@ interface User {
 const Users: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const [data, setData] = useSelector((state:any) => state.users)
+  const data = useSelector((state:any) => state.users)
   const [filteredData, setFilteredData] = useState<User[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [viewModalVisible, setViewModalVisible] = useState<boolean>(false);
@@ -76,9 +76,6 @@ const Users: React.FC = () => {
     setSelectedRecord(record);
   };
 
-  const handleAdd = () => {
-    setAddModalVisible(true);
-  };
 
   const handleEditModalCancel = () => {
     setEditModalVisible(false);
@@ -90,9 +87,6 @@ const Users: React.FC = () => {
     setSelectedRecord(null);
   };
 
-  const handleAddModalCancel = () => {
-    setAddModalVisible(false);
-  };
 
   const handleDelete = (record: User) => {
     // Implement your delete logic here

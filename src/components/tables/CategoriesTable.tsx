@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Tag, Spin, Button, Popconfirm,Modal } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { fetchData, ApiResponse } from '../../api/Api';
+import { fetchData } from '../../api/Api';
 import { useSelector, useDispatch } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';

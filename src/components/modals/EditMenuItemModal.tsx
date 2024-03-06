@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Checkbox, Button, notification } from 'antd';
+import {  Form, Input, Checkbox, Button, notification } from 'antd';
 import { updateData } from '../../api/Api';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { useSelector } from 'react-redux';
 
-const EditMenuItemModal: React.FC<any> = ({ menuItem, visible, onCancel, onOk, fetchMenuItems }) => {
+const EditMenuItemModal: React.FC<any> = ({ menuItem, fetchMenuItems }) => {
   const [form] = Form.useForm();
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
   const [saving, setSaving] = useState(false);
   const handleOk = async () => {
     try {
+      setSaving(true)
       const values = await form.validateFields();
       const apiUrl = `${MAIN_URL}menu/menu-items/${values.id}/update/`; // Adjust the endpoint accordingly
       const response: any | null = await updateData(apiUrl, values, token);
@@ -26,6 +27,8 @@ const EditMenuItemModal: React.FC<any> = ({ menuItem, visible, onCancel, onOk, f
     } catch (error) {
       console.error('Validation failed:', error);
       // Optionally, you can show an error notification here
+    } finally{
+      setSaving(false)
     }
   };
 

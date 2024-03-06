@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Checkbox, Button, notification } from 'antd';
+import { Form, Input, Checkbox, Button, notification } from 'antd';
 import { updateData, ApiResponse } from '../../api/Api';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { useSelector } from 'react-redux';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Button, Spin, notification } from 'antd';
+import { Form, Input, Button, Spin, notification } from 'antd';
 import { UserOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import { updateData } from '../../api/Api';
 import { MAIN_URL } from '../../redux/ActionTypes';

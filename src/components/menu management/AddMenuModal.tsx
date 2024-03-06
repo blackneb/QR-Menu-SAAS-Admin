@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Form, InputNumber, Input, Select, Button, notification, Upload } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
 import { UploadOutlined } from '@ant-design/icons';
 import { fetchData, createData } from '../../api/Api';
 import { useSelector, useDispatch } from 'react-redux';
@@ -102,7 +101,7 @@ const AddMenuModal: React.FC = () => {
   };
 
   // Dummy method for image upload (replace with actual implementation)
-  const dummyRequest = ({ file, onSuccess }: any) => {
+  const dummyRequest = ({ onSuccess }: any) => {
     setTimeout(() => {
       onSuccess("ok");
     }, 0);

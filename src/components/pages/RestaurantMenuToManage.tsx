@@ -23,7 +23,6 @@ const RestaurantMenuToManage: React.FC = () => {
   const [data, setData] = useState<Restaurant[]>([]);
   const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
-  const [selectedRecord, setSelectedRecord] = useState<Restaurant | null>(null);
 
   useEffect(() => {
     const fetchRestaurantData = async () => {
@@ -46,11 +45,6 @@ const RestaurantMenuToManage: React.FC = () => {
     fetchRestaurantData();
   }, [token]);
 
-  const handleEdit = (record: Restaurant) => {
-    setEditModalVisible(true);
-    setSelectedRecord(record);
-  };
-
   const handleEditMenu = (record: Restaurant) => {
     // Dispatch the selected restaurant to Redux store
     dispatch(add_selected_restaurant(record));
@@ -61,12 +55,6 @@ const RestaurantMenuToManage: React.FC = () => {
 
   const handleEditModalCancel = () => {
     setEditModalVisible(false);
-    setSelectedRecord(null);
-  };
-
-  const handleDelete = (record: Restaurant) => {
-    // Implement your delete logic here
-    console.log('Delete', record);
   };
 
   const columns = [

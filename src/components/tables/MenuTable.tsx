@@ -3,7 +3,7 @@ import { Table, Button, Modal, Input, Select, Popconfirm, Tag, Spin } from 'antd
 import { SearchOutlined } from '@ant-design/icons';
 import { ColumnProps } from 'antd/lib/table';
 import { EditOutlined, EyeOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { fetchData, ApiResponse } from '../../api/Api';
+import { fetchData } from '../../api/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import ViewMenuItemModal from '../modals/ViewMenuItemModal';
@@ -67,15 +67,6 @@ const MenuTable: React.FC = () => {
       setSelectedPreviewRecord(null);
     };
   
-    const handleEdit = (record: MenuItem) => {
-      setEditModalVisible(true);
-      setSelectedRecord(record);
-    };
-  
-    const handleEditModalCancel = () => {
-      setEditModalVisible(false);
-      setSelectedRecord(null);
-    };
   
     const showEditMenuItemModal = (record: MenuItem) => {
       setEditMenuItemModalVisible(true);
