@@ -1,8 +1,10 @@
+// MenuManagement.tsx
 import React, { useState } from 'react';
 import { Tabs } from 'antd';
 import MenuList from '../menu management/MenuLists';
 import AddMenuModal from '../menu management/AddMenuModal';
 import AddCategories from '../menu management/AddCatagories';
+import RestaurantQrCode from '../menu management/RestaurantQrCode';
 
 const { TabPane } = Tabs;
 
@@ -13,6 +15,7 @@ const MenuManagement: React.FC = () => {
   const [menuListKey, setMenuListKey] = useState(1);
   const [addMenuKey, setAddMenuKey] = useState(1);
   const [addCategoriesKey, setAddCategoriesKey] = useState(1);
+  const [qrCodeKey, setQrCodeKey] = useState(1); 
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
@@ -27,6 +30,9 @@ const MenuManagement: React.FC = () => {
         break;
       case '3':
         setAddCategoriesKey((prevKey) => prevKey + 1);
+        break;
+      case '4':
+        setQrCodeKey((prevKey) => prevKey + 1); 
         break;
       default:
         break;
@@ -49,6 +55,11 @@ const MenuManagement: React.FC = () => {
         <TabPane tab={<div style={tabStyle}>Add Categories</div>} key="3">
           <div style={{ height: '80vh', overflowY: 'auto' }}>
             <AddCategories key={addCategoriesKey} />
+          </div>
+        </TabPane>
+        <TabPane tab={<div style={tabStyle}>QR Code</div>} key="4">
+          <div style={{ height: '80vh', overflowY: 'auto' }}>
+            <RestaurantQrCode key={qrCodeKey} />
           </div>
         </TabPane>
       </Tabs>

@@ -232,8 +232,11 @@ const Users: React.FC = () => {
         <Dropdown
           overlay={
             <Menu onClick={({ key }) => handleAction(key as string, record)}>
-              <Menu.Item key="activate">Activate</Menu.Item>
-              <Menu.Item key="deactivate">Deactivate</Menu.Item>
+              {record.is_active ? (
+                <Menu.Item key="deactivate">Deactivate</Menu.Item>
+              ) : (
+                <Menu.Item key="activate">Activate</Menu.Item>
+              )}
             </Menu>
           }
         >
