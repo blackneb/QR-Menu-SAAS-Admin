@@ -1,0 +1,239 @@
+{
+    "restaurantName": "Latika Coffee House & kitchen",
+    "restaurantId": 3,
+    "menus": [
+        {
+            "menuTitle": "pizza",
+            "menuDescription": "pizza",
+            "menuIsActive": true,
+            "menuItems": []
+        },
+        {
+            "menuTitle": "cold drinks",
+            "menuDescription": "drinks",
+            "menuIsActive": true,
+            "menuItems": []
+        },
+        {
+            "menuTitle": "Hot drinks",
+            "menuDescription": "drinks",
+            "menuIsActive": true,
+            "menuItems": []
+        },
+        {
+            "menuTitle": "Traditional",
+            "menuDescription": "none",
+            "menuIsActive": true,
+            "menuItems": [
+                {
+                    "menuItemId": 23,
+                    "name": "specia firfir",
+                    "menuId": 8,
+                    "description": "special  firfir",
+                    "price": 250.0,
+                    "images": [
+                        {
+                            "imageId": 17,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_traditional/menuitem_specia-firfir/b8_ng4wejJ.jpeg",
+                            "description": ""
+                        }
+                    ]
+                },
+                {
+                    "menuItemId": 22,
+                    "name": "Fasting firfir",
+                    "menuId": 8,
+                    "description": "fasting firfir",
+                    "price": 180.0,
+                    "images": [
+                        {
+                            "imageId": 16,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_traditional/menuitem_fasting-firfir/1_zVhYViL.jpeg",
+                            "description": ""
+                        }
+                    ]
+                },
+                {
+                    "menuItemId": 21,
+                    "name": "shiro",
+                    "menuId": 8,
+                    "description": "shiro and injera",
+                    "price": 180.0,
+                    "images": [
+                        {
+                            "imageId": 15,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_traditional/menuitem_shiro/1b0c4a92d1_shi.jpeg",
+                            "description": ""
+                        }
+                    ]
+                },
+                {
+                    "menuItemId": 20,
+                    "name": "Tibs firfir",
+                    "menuId": 8,
+                    "description": "meat",
+                    "price": 280.0,
+                    "images": [
+                        {
+                            "imageId": 14,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_traditional/menuitem_tibs-firfir/531a_QmjHIMz.jpeg",
+                            "description": ""
+                        }
+                    ]
+                },
+                {
+                    "menuItemId": 19,
+                    "name": "Tibs",
+                    "menuId": 8,
+                    "description": "meat",
+                    "price": 300.0,
+                    "images": [
+                        {
+                            "imageId": 13,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_traditional/menuitem_tibs/fb759490e8_tibes.jpeg",
+                            "description": ""
+                        }
+                    ]
+                },
+                {
+                    "menuItemId": 18,
+                    "name": "Quanta firfir",
+                    "menuId": 8,
+                    "description": "firfir",
+                    "price": 300.0,
+                    "images": [
+                        {
+                            "imageId": 12,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_traditional/menuitem_quanta-firfir/08_QbXnGme.jpeg",
+                            "description": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "menuTitle": "snack",
+            "menuDescription": "none",
+            "menuIsActive": true,
+            "menuItems": [
+                {
+                    "menuItemId": 17,
+                    "name": "double burger",
+                    "menuId": 7,
+                    "description": "Double Beef patties , tomato , onion , lettuce , chili & cocktail sauce",
+                    "price": 420.0,
+                    "images": [
+                        {
+                            "imageId": 11,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_snack/menuitem_double-burger/940c2f4db2_b.jpg",
+                            "description": ""
+                        }
+                    ]
+                },
+                {
+                    "menuItemId": 16,
+                    "name": "cheese burger",
+                    "menuId": 7,
+                    "description": "Beef patties , slice of cheese , tomato ,onion , lettuce , chili , cocktail sauce",
+                    "price": 370.0,
+                    "images": [
+                        {
+                            "imageId": 10,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_snack/menuitem_cheese-burger/dad00eaff_a1ELuVz.jpg",
+                            "description": ""
+                        }
+                    ]
+                },
+                {
+                    "menuItemId": 15,
+                    "name": "Beef burger",
+                    "menuId": 7,
+                    "description": "Beef patties , tomato ,onion , lettuce , chili , cocktail sauce",
+                    "price": 350.0,
+                    "images": [
+                        {
+                            "imageId": 9,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_snack/menuitem_beef-burger/4159b65dbd__VL6jHQI.jpg",
+                            "description": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "menuTitle": "Breakfast",
+            "menuDescription": "none",
+            "menuIsActive": true,
+            "menuItems": [
+                {
+                    "menuItemId": 14,
+                    "name": "Foul normal/special",
+                    "menuId": 6,
+                    "description": "traditional  breakfast",
+                    "price": 170.0,
+                    "images": []
+                },
+                {
+                    "menuItemId": 13,
+                    "name": "Foul normal/special",
+                    "menuId": 6,
+                    "description": "traditional  breakfast",
+                    "price": 170.0,
+                    "images": []
+                },
+                {
+                    "menuItemId": 12,
+                    "name": "chechebsa normal/special",
+                    "menuId": 6,
+                    "description": "Traditional breakfast",
+                    "price": 200.0,
+                    "images": []
+                },
+                {
+                    "menuItemId": 11,
+                    "name": "chechebsa normal/special",
+                    "menuId": 6,
+                    "description": "Traditional breakfast",
+                    "price": 200.0,
+                    "images": []
+                },
+                {
+                    "menuItemId": 10,
+                    "name": "chechebsa normal/special",
+                    "menuId": 6,
+                    "description": "Traditional breakfast",
+                    "price": 180200.0,
+                    "images": []
+                },
+                {
+                    "menuItemId": 9,
+                    "name": "chechebsa normal/special",
+                    "menuId": 6,
+                    "description": "Traditional breakfast",
+                    "price": 180200.0,
+                    "images": []
+                },
+                {
+                    "menuItemId": 8,
+                    "name": "Bulla",
+                    "menuId": 6,
+                    "description": "Traditional breakfast",
+                    "price": 200.0,
+                    "images": [
+                        {
+                            "imageId": 8,
+                            "imageUrl": "media/restaurant_latika-coffee-house-kitchen/menu_breakfast/menuitem_bulla/6f58e16a11_bulla.jpeg",
+                            "description": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "menuTitle": "Bre",
+            "menuDescription": "none",
+            "menuIsActive": false,
+            "menuItems": []
+        }
+    ]
+}

@@ -13,6 +13,7 @@ import ManageRestaurantMenuTabs from '../tabs/ManageRestaurantMenuTabs';
 import RegistrationTabs from '../tabs/RegistrationTabs';
 import ProfileManagementTabs from '../tabs/ProfileManagementTabs';
 import MenuManagement from '../pages/MenuManagement';
+import RestaurantMenu from '../pages/RestaurantMenu';
 
 
 
@@ -34,6 +35,7 @@ const InnerRouting: React.FC = () => {
         <Route path="/analytics" element={<Login/>} />
         <Route path="/notifications" element={<Login/>} />
         <Route path="/restaurants/:id" element={<MenuManagement/>} />
+        <Route path="/menulist/:id" element={<RestaurantMenu/>} />
       </Routes>
   );
 };

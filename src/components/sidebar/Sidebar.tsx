@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -10,25 +10,23 @@ import {
   ProfileOutlined,
   LineChartOutlined,
   BellOutlined,
+  ToolOutlined,
 } from '@ant-design/icons';
 import Navbar from '../navbar/Navbar';
 import RegistrationTabs from '../tabs/RegistrationTabs';
 import RestaurantsTabs from '../tabs/RestaurantsTabs';
 import UserTabs from '../tabs/UserTabs';
 import ProfileManagementTabs from '../tabs/ProfileManagementTabs';
-import { ToolOutlined } from '@ant-design/icons';
-import ManageRestaurantMenuTabs from '../tabs/ManageRestaurantMenuTabs';
-
 import { useSelector } from 'react-redux';
 import InnerRouting from '../routing/InnerRouting';
 import Login from '../auth/Login';
+import ManageRestaurantMenuTabs from '../tabs/ManageRestaurantMenuTabs';
 
 const { Header, Sider, Content } = Layout;
 
 const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  // const location = useLocation();
-  const [selectedMenuItem, setSelectedMenuItem] = useState<string>('users'); // Default selected menu item
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string>('users'); 
   const userLoggedIn = useSelector((state: any) => state.userInformation.userLogged);
 
   const toggleCollapsed = () => {
@@ -70,13 +68,14 @@ const Sidebar: React.FC = () => {
           <Login />
         </>
       )}
-      {userLoggedIn && (
+      {userLoggedIn && ( 
         <Layout>
           <Sider
             trigger={null}
             collapsible
             collapsed={collapsed}
             style={{ background: 'white' }}
+            className='hidden md:block'
           >
             <div className="trigger-icon" onClick={toggleCollapsed}>
               {collapsed ? (
@@ -92,6 +91,7 @@ const Sidebar: React.FC = () => {
               selectedKeys={[selectedMenuItem]}
               onClick={({ key }) => handleMenuClick(key)}
               style={{ background: 'white' }}
+              className='hidden md:block'
             >
               <Menu.Item key="users" icon={<UserOutlined />} style={{ color: '#800020' }}>
                 <Link to="/users">Users</Link>
@@ -118,7 +118,7 @@ const Sidebar: React.FC = () => {
           </Sider>
           <Layout className="site-layout">
             <Content className="p-4 bg-white" style={{ height: 'calc(100vh - 64px)', overflowY: 'auto' }}>
-              <InnerRouting/>
+              <InnerRouting />
             </Content>
           </Layout>
         </Layout>

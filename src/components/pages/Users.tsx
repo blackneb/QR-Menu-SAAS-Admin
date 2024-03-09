@@ -46,6 +46,7 @@ const Users: React.FC = () => {
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
 
   const fetchUserData = async () => {
+    console.log(token)
     try {
       const apiUrl = MAIN_URL + 'users/restaurantadmins/';
       const result: any | null = await fetchData<User[]>(apiUrl, token);

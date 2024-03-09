@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Tag, Input, Spin } from 'antd';
-import { SearchOutlined, EditOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { SearchOutlined, EditOutlined, CheckCircleOutlined, LinkOutlined } from '@ant-design/icons';
 import { fetchData } from '../../api/Api'; 
 import { useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import EditRestaurant from '../modals/EditRestaurant';
 import { useDispatch } from 'react-redux';
 import { add_restaurants } from '../../redux/Actions';
+import { useNavigate } from 'react-router-dom';
 
 
 interface Restaurant {
@@ -22,6 +23,7 @@ interface Restaurant {
 const Restaurants: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const data = useSelector((state: any) => state.restaurants);
   const [filteredData, setFilteredData] = useState<Restaurant[]>([]);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
@@ -151,6 +153,18 @@ const Restaurants: React.FC = () => {
     //   ),
     //   sorter: (a: Restaurant, b: Restaurant) => a.status.localeCompare(b.status),
     // },
+    {
+      title: 'Show',
+      key: 'show',
+      render: (record: Restaurant) => (
+        <Button
+          type="text"
+          style={{ color: 'blue' }}
+          icon={<LinkOutlined />}
+          onClick={() => navigate(`/menulist/${record.id}`)}
+        />
+      ),
+    },
     {
       title: 'Edit',
       key: 'edit',
