@@ -59,8 +59,8 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Header className="site-layout-background p-0 bg-white shadow-md">
+    <Layout style={{ minHeight: '100vh' }} className=''>
+      <Header className="site-layout-background p-0 bg-white shadow-md font-mainfont">
         <Navbar />
       </Header>
       {userLoggedIn === undefined && (
@@ -91,7 +91,7 @@ const Sidebar: React.FC = () => {
               selectedKeys={[selectedMenuItem]}
               onClick={({ key }) => handleMenuClick(key)}
               style={{ background: 'white' }}
-              className='hidden md:block'
+              className='hidden md:block font-mainfont'
             >
               <Menu.Item key="users" icon={<UserOutlined />} style={{ color: '#800020' }}>
                 <Link to="/users">Users</Link>
@@ -117,7 +117,7 @@ const Sidebar: React.FC = () => {
             </Menu>
           </Sider>
           <Layout className="site-layout">
-            <Content className="p-4 bg-white" style={{ height: 'calc(100vh - 64px)', overflowY: 'auto' }}>
+            <Content className="p-4 bg-white " style={{ height: 'calc(100vh - 64px)', overflowY: 'auto' }}>
               <InnerRouting />
             </Content>
           </Layout>

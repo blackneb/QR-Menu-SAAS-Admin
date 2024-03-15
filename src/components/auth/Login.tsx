@@ -7,16 +7,18 @@ import { MAIN_URL } from '../../redux/ActionTypes';
 import { add_user_information } from '../../redux/Actions';
 import axios from 'axios';
 import { notification } from 'antd'; 
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    const storedSession = localStorage.getItem('userSession');
+    const storedSession = cookies.get('userSession');
     if (storedSession) {
-      const userInformation = JSON.parse(storedSession);
-      dispatch(add_user_information(userInformation));
+      dispatch(add_user_information(storedSession));
       navigate("/users");
     }
   }, [dispatch, navigate]);
@@ -44,11 +46,7 @@ const Login: React.FC = () => {
           profile: res.data,
         };
 
-        localStorage.setItem('userSession', JSON.stringify(userInformation));
-        setTimeout(() => {
-          localStorage.removeItem('userSession');
-        }, 2 * 60 * 60 * 1000); 
-
+        cookies.set('userSession', userInformation, { maxAge: 100 });
         dispatch(add_user_information(userInformation));
         navigate("/users");
       } catch (error) {

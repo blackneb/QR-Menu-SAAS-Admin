@@ -3,7 +3,7 @@ import Sidebar from "./components/sidebar/Sidebar"
 function App() {
 
   return (
-    <div className="font-Ubuntu flex flex-row">
+    <div className="flex flex-row">
       <Sidebar />
     </div>
   )

@@ -5,8 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'madimi-one': ['Madimi One', 'cursive'],
+        'newfont':['Truculenta', 'sans-serif'],
+        'mainfont':['Nunito', 'sans-serif']
+      },
+    },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography'),],
 }
 
