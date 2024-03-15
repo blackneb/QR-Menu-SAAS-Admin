@@ -24,7 +24,6 @@ const EditCategoryModal: React.FC<any> = ({ category, onOk,fetchCategories }) =>
       const response: ApiResponse<Category> | null = await updateData<Category>(apiUrl, values, token);
 
       if (response !== null) {
-        console.log('Category updated successfully:', response);
         fetchCategories()
         notification.success({
           message:"Updated Successfully",

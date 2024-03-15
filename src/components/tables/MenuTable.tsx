@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Input, Select, Popconfirm, Tag, Spin } from 'antd';
+import { Table, Button, Modal, Input, Select, Popconfirm, Tag, Spin, notification } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { ColumnProps } from 'antd/lib/table';
 import { EditOutlined, EyeOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { fetchData } from '../../api/Api';
+import { fetchData, deleteData } from '../../api/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import ViewMenuItemModal from '../modals/ViewMenuItemModal';
@@ -78,9 +78,25 @@ const MenuTable: React.FC = () => {
       setSelectedRecord(null);
     };
   
-    const handleDelete = (record: MenuItem) => {
-      // Implement your delete logic here
-      console.log('Delete', record);
+    const handleDelete = async (record: MenuItem) => {
+      try {
+        const apiUrl = MAIN_URL + `menu/menu-items/${record.id}/`;
+        await deleteData(apiUrl, token);
+        // If deletion is successful, you may want to update your local state or refetch menu items
+        await fetchMenuItems();
+        // Show success notification
+        notification.success({
+          message: 'Success',
+          description: 'Menu item deleted successfully',
+        });
+      } catch (error) {
+        console.error('Error deleting menu item:', error);
+        // Show error notification
+        notification.error({
+          message: 'Error',
+          description: 'Failed to delete menu item. Please try again.',
+        });
+      }
     };
   
     const confirmDelete = (record: MenuItem) => {

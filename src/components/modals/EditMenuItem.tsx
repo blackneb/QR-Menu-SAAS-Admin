@@ -4,14 +4,11 @@ import { Form, Input, Button, InputNumber } from 'antd';
 const EditMenuItem = ({selectedRecord}:any) => {
     const [loading, setLoading] = useState(false);
     const onFinish = async (values: any) => {
-        console.log(values)
-        console.log(selectedRecord)
         try {
           setLoading(true);
           // Add your account creation logic here, e.g., make an API request
           // Simulate a delay for demonstration purposes (remove in a real application)
           await new Promise(resolve => setTimeout(resolve, 2000));
-          console.log('Account creation successful!');
         } catch (error: any) {
           console.error('Account creation failed:', error.message);
         } finally {

@@ -68,12 +68,10 @@ const AddMenuModal: React.FC = () => {
 
       if (menuItemResult !== null) {
         fetchMenuItems()
-        console.log('Menu item creation successful!', menuItemResult);
         notification.success({
           message: 'Registration Successful',
           description: 'Menu item has been registered successfully!',
         });
-        console.log(menuItemResult)
         // Add any further actions upon successful creation, e.g., redirect or notify the user
 
         // Now handle the menu item images

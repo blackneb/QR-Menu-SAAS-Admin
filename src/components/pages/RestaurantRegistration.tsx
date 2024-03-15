@@ -30,8 +30,6 @@ const RestaurantRegistration: React.FC<RegistrationProps> = () => {
       
       // Handle success response (e.g., show a success message)
       if (response !== null) {
-        console.log('Registration successful:', response);
-
         // Display success notification
         notification.success({
           message: 'Registration Successful',

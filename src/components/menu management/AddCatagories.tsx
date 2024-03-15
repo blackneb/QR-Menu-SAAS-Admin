@@ -42,7 +42,6 @@ const AddCategories: React.FC = () => {
       const result: ApiResponse<any> | null = await createData(apiUrl, apiJson, token);
 
       if (result !== null) {
-        console.log('Category creation successful!');
         fetchCategories()
         notification.success({
           message: 'Registration Successful',

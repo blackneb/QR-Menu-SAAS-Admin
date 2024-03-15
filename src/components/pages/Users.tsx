@@ -46,7 +46,6 @@ const Users: React.FC = () => {
   const token = useSelector((state: any) => state.userInformation.userprofile.token);
 
   const fetchUserData = async () => {
-    console.log(token)
     try {
       const apiUrl = MAIN_URL + 'users/restaurantadmins/';
       const result: any | null = await fetchData<User[]>(apiUrl, token);
@@ -91,7 +90,6 @@ const Users: React.FC = () => {
 
   const handleDelete = (record: User) => {
     // Implement your delete logic here
-    console.log('Delete', record);
   };
 
   const confirmDelete = (record: User) => {
@@ -107,7 +105,6 @@ const Users: React.FC = () => {
       const result: any = await axios.put(apiUrl, { action }, { headers: { Authorization: `Bearer ${token}` } });
   
       // Handle the result as needed, e.g., update the state or show a notification
-      console.log(result);
       if (result.status === 200) {
         // Show a success notification
         fetchUserData()

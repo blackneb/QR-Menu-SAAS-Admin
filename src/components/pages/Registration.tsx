@@ -18,8 +18,6 @@ const Registration: React.FC<RegistrationProps> = () => {
       // Send the form data to the backend API using createData function
       const response: ApiResponse<any> | null = await createData(apiUrl, values, token);
       if (response !== null) {
-        console.log('Registration successful:', response);
-
         // Display success notification
         notification.success({
           message: 'Registration Successful',
@@ -27,7 +25,6 @@ const Registration: React.FC<RegistrationProps> = () => {
         });
       }
       // Handle success response (e.g., show a success message)
-      console.log('Registration successful:', response);
     } catch (error) {
       // Handle error (already handled in createData function)
       console.error('Registration failed:', error);

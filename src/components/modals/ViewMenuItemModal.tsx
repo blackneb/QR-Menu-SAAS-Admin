@@ -3,7 +3,6 @@ import { Descriptions, Image } from 'antd';
 import { MAIN_URL } from '../../redux/ActionTypes';
 
 const ViewMenuItemModal: React.FC<any> = ({ menuItem }) => {
-  console.log(menuItem);
 
   // Check if menuItem is undefined or null
   if (!menuItem) {

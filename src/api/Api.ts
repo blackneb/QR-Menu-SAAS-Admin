@@ -20,7 +20,6 @@ const fetchData = async <T>(apiUrl: string, token: string): Promise<ApiResponse<
   try {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const response: AxiosResponse<ApiResponse<T>> = await axios.get(apiUrl, { headers });
-    console.log(response.data)
     return response.data;
   } catch (error:any) {
     console.error('Error fetching data:', error);
@@ -30,8 +29,6 @@ const fetchData = async <T>(apiUrl: string, token: string): Promise<ApiResponse<
 
 // Function to perform POST request with Bearer token
 const createData = async <T>(apiUrl: string, newData: object, token: string): Promise<ApiResponse<T> | null> => {
-  console.log(newData);
-  console.log(token)
   try {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const response: AxiosResponse<ApiResponse<T>> = await axios.post(apiUrl, newData, { headers });

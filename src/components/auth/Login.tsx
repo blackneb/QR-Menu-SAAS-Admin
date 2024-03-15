@@ -46,21 +46,18 @@ const Login: React.FC = () => {
           profile: res.data,
         };
 
-        cookies.set('userSession', userInformation, { maxAge: 100 });
+        cookies.set('userSession', userInformation, { maxAge: 2000 });
         dispatch(add_user_information(userInformation));
         navigate("/users");
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
       setLoading(false);
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       notification.warning({
         message: error.response.data.Message[0],
-        duration: 5,
-        onClose: () => {
-          console.log('Notification closed');
-        },
+        duration: 5
       });
       setLoading(false);
     } finally {

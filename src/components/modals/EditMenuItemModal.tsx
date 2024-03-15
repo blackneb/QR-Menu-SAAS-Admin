@@ -16,7 +16,6 @@ const EditMenuItemModal: React.FC<any> = ({ menuItem, fetchMenuItems }) => {
       const response: any | null = await updateData(apiUrl, values, token);
 
       if (response !== null) {
-        console.log('Menu item updated successfully:', response);
         fetchMenuItems();
         notification.success({
           message:"Updated Successfully",

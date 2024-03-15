@@ -22,7 +22,6 @@ const EditRestaurant: React.FC<any> = ({ record, onCancel, fetchRestaurantData }
       const response: any | null = await updateData(apiUrl, values, token);
 
       if (response !== null) {
-        console.log('Restaurant details updated successfully:', response);
         fetchRestaurantData();
         // Display success notification
         notification.success({

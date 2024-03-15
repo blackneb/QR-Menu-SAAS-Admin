@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, Spin, Button, Popconfirm,Modal } from 'antd';
+import { Table, Tag, Spin, Button, Popconfirm,Modal, notification } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { fetchData } from '../../api/Api';
+import { fetchData, deleteData } from '../../api/Api';
 import { useSelector, useDispatch } from 'react-redux';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -51,9 +51,26 @@ const CategoryTable: React.FC = () => {
     setEditModalVisible(true);
   };
 
-  const handleDelete = (record: MenuItem) => {
-    // Implement your delete logic here
-    console.log('Delete', record);
+  const handleDelete = async (record: MenuItem) => {
+    try {
+      const apiUrl = MAIN_URL + `menu/menus/${record.id}/`;
+      await deleteData(apiUrl, token);
+      // If deletion is successful, you may want to update your local state or refetch categories
+      // For example, you can refetch categories:
+      await fetchCategories();
+      // Show success notification
+      notification.success({
+        message: 'Success',
+        description: 'Category deleted successfully',
+      });
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      // Show error notification
+      notification.error({
+        message: 'Error',
+        description: 'Failed to delete category. Please try again.',
+      });
+    }
   };
 
   const handleEditModalCancel = () => {
@@ -63,7 +80,6 @@ const CategoryTable: React.FC = () => {
 
   const handleEditModalOk = (updatedCategory: MenuItem) => {
     // Handle the update logic here
-    console.log('Updated Category:', updatedCategory);
 
     // Close the modal
     setEditModalVisible(false);

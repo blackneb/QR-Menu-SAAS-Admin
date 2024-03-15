@@ -18,7 +18,6 @@ const ChangePassword: React.FC = () => {
     
         if (result !== null) {
           // Handle the result as needed, e.g., show a success message
-          console.log(result);
           notification.success({
             message: 'Password Change',
             description: 'Password has been Changed successfully!',
