@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Tabs, Tag, Col, Row, Result } from 'antd';
+import { Card, Tabs, Tag, Col, Row, Result, Spin } from 'antd';
 import { MAIN_URL } from '../../redux/ActionTypes';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -31,14 +31,15 @@ interface RestaurantData {
   menus: Menu[];
 }
 
-const tabStyle = { color: '#800020', borderColor: '#800020' };
+const tabStyle = { color: '#800020', borderColor: '#800020', backgroundCOlor:"white" };
 
 const RestaurantMenu: React.FC<RestaurantMenuProps> = () => {
   const { id } = useParams<{ id: string }>();
   const tagStyle = { color: '#800020', borderColor: '#800020' };
   const [activeTab, setActiveTab] = useState('1');
   const [restaurantData, setRestaurantData] = useState<RestaurantData | null>(null);
-  const token = useSelector((state: any) => state.userInformation.userprofile.token);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
@@ -48,41 +49,45 @@ const RestaurantMenu: React.FC<RestaurantMenuProps> = () => {
     const fetchDataAndSetState = async () => {
       try {
         const apiUrl = MAIN_URL + `menu/restaurants/${id}/menulist/`;
-        const result: any | null = await fetchData<RestaurantData[]>(apiUrl, token);
+        const result: any | null = await fetchData<RestaurantData[]>(apiUrl, "");
         if (result !== null) {
           setRestaurantData(result);
+          setLoading(false); // Set loading to false when data is fetched successfully
         } else {
-          // Handle the case where the result is null (restaurant not found)
-          console.error('Restaurant not found');
-          setRestaurantData(null); // Set the state to null
+          setError(true); // Set error to true if result is null
         }
       } catch (error) {
-        // Handle the case where there is an error while fetching data
-        console.error('Error fetching data:', error);
-        setRestaurantData(null); // Set the state to null
+        setError(true); // Set error to true if there is an error while fetching data
       }
     };
 
     fetchDataAndSetState();
-  }, [id, token]);
+  }, [id]);
 
-  if (!restaurantData) {
-    // Display message when the restaurant data is null (not found or error)
-    return <div><Result
-    status="404"
-    title="404"
-    subTitle="Sorry, the restaurant data is not found or an error occurred while fetching data."
-  /></div>;
+  if (loading) {
+    // Display loading spinner while fetching data
+    return <Spin />;
+  }
+
+  if (error || !restaurantData) {
+    // Display error message when there is an error or restaurant data is null
+    return (
+      <Result
+        status="404"
+        title="404"
+        subTitle="Sorry, the restaurant data is not found or an error occurred while fetching data."
+      />
+    );
   }
 
   return (
-    <div>
+    <div className='bg-white p-4'>
       <Tag style={{ marginBottom: 16 }} color='green'>
         {restaurantData.restaurantName}
       </Tag>
       <Tabs activeKey={activeTab} onChange={handleTabChange} style={tabStyle}>
         {restaurantData.menus.map((menu, index) => (
-          <TabPane tab={menu.menuTitle} style={tabStyle} key={index.toString()}>
+          <TabPane className='bg-white' tab={menu.menuTitle} style={tabStyle} key={index.toString()}>
             <Row gutter={[16, 16]}>
               {menu.menuItems.map((menuItem, itemIndex) => (
                 <Col key={itemIndex} xs={24} sm={12} lg={8}>

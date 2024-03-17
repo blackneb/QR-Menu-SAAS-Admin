@@ -46,7 +46,7 @@ const Login: React.FC = () => {
           profile: res.data,
         };
 
-        cookies.set('userSession', userInformation, { maxAge: 2000 });
+        cookies.set('userSession', userInformation, { maxAge: 3600 });
         dispatch(add_user_information(userInformation));
         navigate("/users");
       } catch (error) {

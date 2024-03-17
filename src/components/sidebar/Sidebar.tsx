@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import InnerRouting from '../routing/InnerRouting';
 import Login from '../auth/Login';
 import ManageRestaurantMenuTabs from '../tabs/ManageRestaurantMenuTabs';
+import Routing from '../routing/Routing';
 
 const { Header, Sider, Content } = Layout;
 
@@ -59,13 +60,13 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }} className=''>
+    <Layout style={{ minHeight: '100vh', backgroundColor:"white" }} className=''>
       <Header className="site-layout-background p-0 bg-white shadow-md font-mainfont">
         <Navbar />
       </Header>
       {userLoggedIn === undefined && (
         <>
-          <Login />
+          <Routing/>
         </>
       )}
       {userLoggedIn && ( 
