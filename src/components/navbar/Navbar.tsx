@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = () => {
           <Link to="/users">
             <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
           </Link>
-          <span className="self-center text-2xl font-semibold whitespace-nowrap text-black">QR Menu</span>
+          <span className="self-center text-2xl font-semibold whitespace-nowrap text-black">Menu</span>
         </div>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           {userLoggedIn ? (
